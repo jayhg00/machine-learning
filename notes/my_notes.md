@@ -286,3 +286,24 @@ Then, P1-P2-P3, P4-5-6 cluster are grouped to form one single cluster with heigh
 - Where this horizontal line cuts the vertical lines, those vertical lines are the final clusters. In above image, two vertical lines are cut and the clusters are P1-2-3 & P4-5-6
 
 
+### Dimensionality Reduction
+Dimensions mean the number of input features. Often, the output variable depends on only a few important input features. Adding less important input features to the model increases processing time and reduces performance. This is CURSE OF DIMENSIONALITY.
+
+Why Reduce Dimensions?
+* Prevent Curse of Dimensionality
+* Improve model performance
+* Reduce to 2 dimensions helps to visualize the data & interpret it easily
+
+Ways for Dimensionality Reduction-
+* Feature Selection -
+  * Select features that highly influence the Output over less influential features.
+  * Use Correlation between the feature and output. -1 < Correlation < +1.
+  * Correlation > 0.8 ==> VERY GOOD; 0.3 < CORR < 0.8 ==> MEDIUM; CORR < 0.3 ==> POOR
+* Feature Extraction -
+  * Here, multiple features are combined/transformed to create lesser number of features
+  * Examples-
+    * Principal Component Analysis (PCA)
+    * Linear Discriminant Analysis (LDA)
+    * Kernal PCA  
+ 
+
