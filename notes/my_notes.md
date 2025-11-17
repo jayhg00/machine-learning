@@ -19,6 +19,18 @@ p: is the number of independent variables (features) in your model.`
   - F1-score, `from sklearn.metrics import f1_score`. harmonic mean of precision and recall `2PR/(P+R)` . Lies between 0 & 1
   - AUC-ROC `from sklearn.metrics import roc_auc_score`. Lies between 0 & 1
 
+## Bias Variance Tradeoff ##
+Bias
+- Model's ability to fit the training data accurately. A GOOD FIT means a LOW BIAS ==> DESIRED
+- High Bias: The model is too simple (e.g., fitting a straight line to curved data). It performs poorly on both training and test data (UNDERFITTING). 
+
+Variance
+- Model's ability to generalize to new, unseen data. LOW VARIANCE means model works good on Test data ==> DESIRED
+- High Variance: The model is too complex (e.g., a very deep decision tree). It performs very well on the training data but poorly on the test data (OVERFITTING). 
+
+**IDEAL MODEL - LOW BIAS, LOW VARIANCE.**
+As model complexity increases, bias generally decreases (the model can better fit the training data), but variance increases (the model becomes more sensitive to data fluctuations). Conversely, as model complexity decreases, bias increases, and variance decreases. So, optimal balance between Bias & Variance is to be struck
+
 # **ML Project Key Stages**
 - Data Collection
 - Exploratory Data analysis (EDA) to clean up data
