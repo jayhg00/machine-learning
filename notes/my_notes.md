@@ -376,3 +376,23 @@ Output-
  [ 0  0  6]]
 1.0 ### Accuracy = 100% (case of overfitting ??)
 ```
+
+### Kernel PCA ###
+- **Nonlinear** dimensionality reduction technique that extends standard PCA by using the kernel trick (that we saw in SVM) to project data into a higher-dimensional space, where it becomes linearly separable
+- Captures complex, non-linear patterns in the data that traditional linear PCA cannot, by performing PCA in this new feature space.
+
+```Python
+## Rest of the code same as PCA
+# Applying Kernel PCA
+from sklearn.decomposition import KernelPCA
+kpca = KernelPCA(n_components = 2, kernel = 'rbf')
+X_train = kpca.fit_transform(X_train)
+X_test = kpca.transform(X_test)
+## Rest of the code same as PCA
+
+Output-
+[[14  0  0]
+ [ 0 16  0]
+ [ 0  0  6]]
+1.0 ### Accuracy = 100% (case of overfitting ??)
+```
