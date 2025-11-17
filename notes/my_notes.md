@@ -307,7 +307,8 @@ Ways for Dimensionality Reduction-
     * Kernal PCA  
 
 ### Principal Component Analysis (PCA) ###
-It transforms a large dataset into a new, smaller set of uncorrelated variables called principal components. PCA creates new variables, the principal components, which are linear combinations of the original variables.
+- It transforms a large dataset into a new, smaller set of uncorrelated variables called principal components. PCA creates new variables, the principal components, which are linear combinations of the original variables.
+- Unsupervised type of Dimension Reduction since it only considers the Independent features
 
 ```Python
 ## Importing the libraries
@@ -333,7 +334,7 @@ X_test = sc.transform(X_test)
 ## Applying PCA
 from sklearn.decomposition import PCA
 pca = PCA(n_components = 2) ## Reduce to only 2 Input features
-X_train = pca.fit_transform(X_train)
+X_train = pca.fit_transform(X_train) ## Unsupervised as it takes only X set
 X_test = pca.transform(X_test)
 
 ## Training the Logistic Regression model on the Training set
@@ -355,3 +356,23 @@ Output-
 0.9722222222222222
 ```
 
+
+### Linear Discriminant Analysis ###
+- It finds a linear combination of features that best separates two or more classes by maximizing the distance between class means while minimizing the variation within each class.
+- Supervised type of Dimensionality Reduction as it considers the Dependent variable also
+
+```Python
+## Rest of the code same as PCA
+# Applying LDA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+lda = LDA(n_components = 2)
+X_train = lda.fit_transform(X_train, y_train) ## Supervised as it takes both X & Y to train
+X_test = lda.transform(X_test)
+## Rest of the code same as PCA
+
+Output-
+[[14  0  0]
+ [ 0 16  0]
+ [ 0  0  6]]
+1.0 ### Accuracy = 100% (case of overfitting ??)
+```
