@@ -140,7 +140,9 @@ When to use
 
 ## Cross-validation - KFold ##
 After you split the data into Training & Test set, train the model on Training set and model achieves a good score when applied on Test Set, you want to ensure that the Model did not get plain lucky with the Test Set. So, you use Cross-validation where model performance is repeatedly measured with different subsets of Training & Test data and the overall model performance = Average of all scores.
+
 In KFold, the data is split into k chunks called Folds. Generally, k = 10.  1 Fold will be Validation set while 9 folds will be Training Set. For each of the 10 runs, Validation set is exchanged with 1 Fold of Training set. Score for each run is measured and the overall model performance = Avg of all scores
+
 Different people follow different approaches for Cross-Validation
 - Apply Cross Validation on whole dataset (without train test split)
 - Apply CV on Train & validate it with Validation set. Then, test it on Test set --> **RECOMMENDED**
