@@ -138,6 +138,67 @@ When to use
 - Correlated features: When you have a group of highly correlated predictors. (high multi-collinearity)
 - Feature selection and regularization: When you want to perform both feature selection and regularize the model's coefficients simultaneously. 
 
+## Cross-validation - KFold ##
+After you split the data into Training & Test set, train the model on Training set and model achieves a good score when applied on Test Set, you want to ensure that the Model did not get plain lucky with the Test Set. So, you use Cross-validation where model performance is repeatedly measured with different subsets of Training & Test data and the overall model performance = Average of all scores.
+In KFold, the data is split into k chunks called Folds. Generally, k = 10.  1 Fold will be Validation set while 9 folds will be Training Set. For each of the 10 runs, Validation set is exchanged with 1 Fold of Training set. Score for each run is measured and the overall model performance = Avg of all scores
+Different people follow different approaches for Cross-Validation
+- Apply Cross Validation on whole dataset (without train test split)
+- Apply CV on Train & validate it with Validation set. Then, test it on Test set --> **RECOMMENDED**
+
+Some ML algorithms have separate CV-specific implementation in Scikit Learn library like LinearRegression (LinearRegressionCV), Lasso, Ridge etc and they can be used directly to apply CV to such algos. For other ML algorithms which do not have CV-specific implementations, you apply K-Fold on the Training Set. In below example, KFold CV is applied with Support Vector Classifier as follows-
+
+```Python
+## Importing the libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+## Importing the dataset
+dataset = pd.read_csv('Social_Network_Ads.csv')
+X = dataset.iloc[:, :-1].values
+y = dataset.iloc[:, -1].values
+
+## Splitting the dataset into the Training set and Test set
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
+
+## Feature Scaling
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+## Training the Kernel SVM model on the Training set
+from sklearn.svm import SVC
+classifier = SVC(kernel = 'rbf', random_state = 0)
+classifier.fit(X_train, y_train)
+
+## Making the Confusion Matrix
+from sklearn.metrics import confusion_matrix, accuracy_score
+y_pred = classifier.predict(X_test)
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+accuracy_score(y_test, y_pred)
+
+Output-
+[[64  4]
+ [ 3 29]]
+0.93
+
+
+## Applying k-Fold Cross Validation
+from sklearn.model_selection import cross_val_score
+accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10)
+#Output - [0.806, 0.967, 0.800, 0.933, 0.867, 0.833, 0.933, 0.933, 0.967, 0.966]
+
+print("Accuracy: {:.2f} %".format(accuracies.mean()*100))
+print("Standard Deviation: {:.2f} %".format(accuracies.std()*100))
+
+#Output-
+Accuracy: 90.33 %
+Standard Deviation: 6.57 %
+```
+
 ## Hyperparameter Tuning ##
 Hyperparameters are the parameters that are set before the machine learning model training process begins. You set these hyperparameters when instantiating the model variable or after instantiation
 
