@@ -25,10 +25,10 @@ Assume we have a small dataset as below with 3 independent features - IQ, Study 
 <img width="300" height="auto" alt="image" src="https://github.com/user-attachments/assets/630168d9-48d0-4999-b6a2-f2f171348810" />
 <img width="600" height="auto" alt="image" src="https://github.com/user-attachments/assets/adc09f5b-af3c-4d15-84f1-426066a16bea" />
 
-And we have the ANN with 1 Input Layer (3 inputs), 1 Hidden Layer (1 neuron) & 1 Output Layer (1 Neuron since Binary Classification). 
+And we have the ANN with 1 Input Layer (3 inputs), 2 Hidden Layer (1 neuron each) & 1 Output Layer (1 Neuron since Binary Classification). 
 - Weights are w1, w2, w3, w4, Bias are b1 & b2.
-- Output of HL1 is O1 & Output Layer is O2.
-- Let Weights, bias be initialized as w1=0.01, w2=0.02, w3=0.03; b1=0.001, b2=2
+- Output of HL1 is O1 & HL2 is O2.
+- Let Weights, bias be initialized as w1=0.01, w2=0.02, w3=0.03, w4=0.02; b1=0.001, b2=0.03
 
 So, we provide 1st datapoint to inputs i.e. x1=95, x2=4, x3=4 and do the math as per formula $` z = \sum_{i=1}^n w_i x_i + b `$
 $` z = 95*0.01 + 4*0.02 + 4*0.03 + 0.001 `$
@@ -42,6 +42,30 @@ Then, we apply Activation function to z. Consider Sigmoid Activation function $`
 $` \sigma(z) = \frac{1}{1 + e^{-1.151}} `$
 
 $` O1 = \sigma(z) = 0.759 `$
+
+**For HL2**, $` z = O1*w4 + b2 `$
+
+$` z = 0.759*0.02 + 0.03 = 0.04518 `$
+
+Consider Sigmoid Activation function for O2
+
+$` O2 = \sigma(z) = \frac{1}{1 + e^{-0.04518}}  = 0.51129`$
+
+Now, O2 is Predicted Output $` y_{pred} `$  for DataPoint 1.
+
+Compute the **LOSS FUNCTION** **$` = (y-y_{pred}) = 1-0.51129 = approx  0.49 `$** 
+
+_Note: for simplicity of LOSS Function, we are just taking difference  between Actual & Predicted Output; In reality, the actual Loss Function depends on the Problem that we are solving. For Regression, it could be MSE, MAE; For Classification it could be Binary Cross Entropy Or Categorical Cross Entropy_
+
+- Till now, the network performed the **FORWARD PROPAGATION Step** (Input -> Hidden -> Output) to check the value of Loss Function for current Weights/Bias for DataPoint 1.
+- Now, Neural Network needs to **Minimize this Loss Function value** which it does by **updating the weights & bias using BACK PROPAGATION** (i.e. Output -> Hidden -> Input) for Datapoint 1.
+- Then, the next datapoint 2 is fed to NN with updated weights/biases, evaluate Loss function for dataPoint2 and do Back Propagation to update weight/bias.
+This Forward-Loss Function Eval-Back cycle is done for each Datapoint to get the Min Loss Func Value and final Weights/Bias. 
+- **How quickly and efficiently** (min steps) the Weights/Bias Converge through the **Loss Func Eval & Back Propagation** is controlled by the use of **OPTIMIZERS**
+- This is the Way **NN learns/trains.**
+
+### Backpropagation & Weight updation
+
 
 ```math
 z = \sum_{i=1}^n w_i x_i + b
