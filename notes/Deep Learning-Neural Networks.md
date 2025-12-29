@@ -18,4 +18,33 @@ Artificial Neural Networks (ANN) try to replicate learning similar to neurons in
   - LOSS FUNCTION
   - ACTIVATION FUNCTION
   - OPTIMIZERS
-- 
+
+### How ANN Learns/updates Weights
+Assume we have a small dataset as below with 3 independent features - IQ, Study hours, Play hours & 1 Output feature Pass(1)/Fail(0). So, this is a binary classification problem.
+
+<img width="300" height="auto" alt="image" src="https://github.com/user-attachments/assets/630168d9-48d0-4999-b6a2-f2f171348810" />
+<img width="600" height="auto" alt="image" src="https://github.com/user-attachments/assets/adc09f5b-af3c-4d15-84f1-426066a16bea" />
+
+And we have the ANN with 1 Input Layer (3 inputs), 1 Hidden Layer (1 neuron) & 1 Output Layer (1 Neuron since Binary Classification). 
+- Weights are w1, w2, w3, w4, Bias are b1 & b2.
+- Output of HL1 is O1 & Output Layer is O2.
+- Let Weights, bias be initialized as w1=0.01, w2=0.02, w3=0.03; b1=0.001, b2=2
+
+So, we provide 1st datapoint to inputs i.e. x1=95, x2=4, x3=4 and do the math as per formula $` z = \sum_{i=1}^n w_i x_i + b `$
+$` z = 95*0.01 + 4*0.02 + 4*0.03 + 0.001 `$
+
+$` z = 1.151 `$
+
+Then, we apply Activation function to z. Consider Sigmoid Activation function $` \sigma(x) = \frac{1}{1 + e^{-x}} `$ which gives value 0 to 1
+
+<img width="600" height="auto" alt="image" src="https://github.com/user-attachments/assets/aaeae2dc-9ba4-4456-afcc-efc2848e3212" />
+
+$` \sigma(z) = \frac{1}{1 + e^{-1.151}} `$
+
+$` O1 = \sigma(z) = 0.759 `$
+
+```math
+z = \sum_{i=1}^n w_i x_i + b
+```
+
+
