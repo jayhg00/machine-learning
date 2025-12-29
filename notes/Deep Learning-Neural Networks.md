@@ -65,10 +65,20 @@ This Forward-Loss Function Eval-Back cycle is done for each Datapoint to get the
 - This is the Way **NN learns/trains.**
 
 ### Backpropagation & Weight updation
+- Plot of Loss (assume $` = (y-y_{pred})^2 `$) VS Weight is Gradient Descent Curve
+<img width="400" height="auto" alt="image" src="https://github.com/user-attachments/assets/f8dad88e-3968-4049-a066-471091616473" />
 
+so, we start at some initial Weight value with some Loss Value. Depending on the slope at that point, Weight is updated to move towards Global Minima where Slope = 0.
 
-```math
-z = \sum_{i=1}^n w_i x_i + b
-```
+- Backpropagation uses Derivatives of Loss Func wrt Weights to update the Weights/Bias. This is the **Weight updation Formula**
 
+$` w_{\text{new}}=w_{\text{old}}-\eta \cdot \frac{\partial Loss}{\partial w} `$
 
+where $` w_{\text{new}} `$: The updated weight.
+
+$` w_{\text{old}} `$: The current weight.
+
+$` \eta (eta) `$: The **learning rate**, a small positive constant (e.g., 0.01) that controls the step size.
+
+- Learning Rate needs to be optimally set. If too low, then updation occurs in smaller steps and hence takes longer to reach Global minima. If too high, then w-value oscillates on both sides of GLobal Minima and can lead to Exploding Gradient problem and never converge
+- When Derivative(Loss)/Derivative(Weight) = 0 , then w-new = w-old and hence no weight updation occurs. The final weight/bias has been reached
