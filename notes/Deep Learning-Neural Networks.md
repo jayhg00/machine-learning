@@ -1,7 +1,7 @@
 Artificial Neural Networks (ANN) try to replicate learning similar to neurons in human brain. 
 
 ## Perceptron (Single Layer Neuron) Intuition
-<img width="968" height="805" alt="image" src="https://github.com/user-attachments/assets/04391b6e-db9f-4ae7-ac70-67aa7269486b" />
+<img width="484" height="402" alt="image" src="https://github.com/user-attachments/assets/04391b6e-db9f-4ae7-ac70-67aa7269486b" />
 
 * Input Layer = No of independent variables.
 * Hidden Layer = 1 Neuron
