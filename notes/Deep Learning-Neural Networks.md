@@ -82,3 +82,31 @@ $` \eta (eta) `$: The **learning rate**, a small positive constant (e.g., 0.01) 
 
 - Learning Rate needs to be optimally set. If too low, then updation occurs in smaller steps and hence takes longer to reach Global minima. If too high, then w-value oscillates on both sides of GLobal Minima and can lead to Exploding Gradient problem and never converge
 - When Derivative(Loss)/Derivative(Weight) = 0 , then w-new = w-old and hence no weight updation occurs. The final weight/bias has been reached
+
+- Now, Derivative(Loss)/Derivative(Weight) is got by **CHAIN RULE OF DERIVATIVES**. Consider the following ANN-
+  
+  <img width="993" height="auto" alt="image" src="https://github.com/user-attachments/assets/ef0395d3-adde-4284-952d-3d7b05872d80" />
+- **To update w4**, formula is $` w_{\text{4new}}=w_{\text{4old}}-\eta \cdot \frac{\partial Loss}{\partial w_{4old}} `$
+
+  Now, because Loss is dependent on Output O2 and O2 is dependent on w4, the Derv(Loss)/Derv(w4) $` \frac{\partial Loss}{\partial w_{4old}} `$ can be got by following Chain Rule breakdown -
+  
+  <img width="400" height="auto" alt="image" src="https://github.com/user-attachments/assets/43ab241d-0539-482a-9f71-7e99339dd187" />
+
+- Similarly, **to update w1**, formula is $` w_{\text{1new}}=w_{\text{1old}}-\eta \cdot \frac{\partial Loss}{\partial w_{1old}} `$
+
+  Now, because Loss is dependent on Output O2 and O2 is dependent on O1 and O1 is dependent on w1, the Derv(Loss)/Derv(w1) $` \frac{\partial Loss}{\partial w_{1old}} `$ can be got by following Chain Rule breakdown -
+
+  <img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/5564376f-05ce-46f5-ba89-8f7d83933ca7" />
+
+  Similarly, w2 & w3 have same breakdown as w1
+<hr/>
+
+- Consider the following ANN-
+
+  <img width="1327" height="auto" alt="image" src="https://github.com/user-attachments/assets/ea18bdc5-1764-49b0-bac9-7cd4b5468a8b" />
+
+- **To update w1**, formula is $` w_{\text{1new}}=w_{\text{1old}}-\eta \cdot \frac{\partial Loss}{\partial w_{1old}} `$
+
+  Now, there are two paths from Loss to w1. 1st path is Loss -> O31 -> O21 -> O11 -> w1. 2nd path is Loss -> O31 -> O22 -> O12 -> w1. Then, the Derv(Loss)/Derv(w1) $` \frac{\partial Loss}{\partial w_{1old}} `$ can be got by following Chain Rule breakdown -
+
+  <img width="600" height="auto" alt="image" src="https://github.com/user-attachments/assets/1de2d810-515a-4091-a673-070e11b6cf13" />
