@@ -110,3 +110,19 @@ $` \eta (eta) `$: The **learning rate**, a small positive constant (e.g., 0.01) 
   Now, there are two paths from Loss to w1. 1st path is Loss -> O31 -> O21 -> O11 -> w1. 2nd path is Loss -> O31 -> O22 -> O12 -> w1. Then, the Derv(Loss)/Derv(w1) $` \frac{\partial Loss}{\partial w_{1old}} `$ can be got by following Chain Rule breakdown -
 
   <img width="600" height="auto" alt="image" src="https://github.com/user-attachments/assets/1de2d810-515a-4091-a673-070e11b6cf13" />
+
+### Sigmoid Activation function & Vanishing Gradient Problem
+- Consider an ANN like below. In each layer, we use Sigmoid Activation function-
+<img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/07ff4eae-8b13-4ef1-863f-513c5015954d" />
+
+- Now, we know that to update w1, formula is $` w_{\text{1new}}=w_{\text{1old}}-\eta \cdot \frac{\partial Loss}{\partial w_{1old}} `$
+- And, by Chain Rule, $` \frac{\partial Loss}{\partial w_{1old}} = \frac{\partial Loss}{\partial O_{31}} * \frac{\partial O_{31}}{\partial O_{21}} * \frac{\partial O_{21}}{\partial O_{11}} * \frac{\partial O_{11}}{\partial w_{1old}}`$
+- Now, to understand, lets evaluate just one of the terms $` \frac{\partial O_{31}}{\partial O_{21}} `$.
+  
+  We know $` O_{31} = \sigma(w_{3}*O_{21}+b_{3}) `$
+
+  Let $` z = w_{3}*O_{21}+b_{3} `$
+
+  Then,  $` O_{31} = \sigma(z) `$
+
+  And, $` \frac{\partial O_{31}}{\partial O_{21}} = \frac{\partial \sigma(z)}{\partial z} * \frac{\partial z}{\partial O_{21}}`$
