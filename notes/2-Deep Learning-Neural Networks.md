@@ -170,7 +170,7 @@ $` \eta (eta) `$: The **learning rate**, a small positive constant (e.g., 0.01) 
 ### ReLU Activation Function (Rectified Linear Unit)
 <img width="663" height="auto" alt="image" src="https://github.com/user-attachments/assets/9969e964-08cf-40c5-b1ad-2375281e9387" />
 
-- For x < 0, ReLU(x) = 0; x > 0, ReLU(x) = x. So, can be written as ReLU(x) = max(0,input)
+- For x < 0, ReLU(x) = 0; x > 0, ReLU(x) = x. So, can be written as ReLU(x) = max(0,x)
 - And Derv(ReLU) = 0 for x < 0, Derv(ReLU) = 1 for x >= 0
 
 <img width="450" height="auto" alt="image" src="https://github.com/user-attachments/assets/bf88e326-d38a-4c14-98c4-80a04a45d5f7" />
@@ -185,3 +185,54 @@ $` \eta (eta) `$: The **learning rate**, a small positive constant (e.g., 0.01) 
   #### Disadvantages of ReLU
   - Prone to DEAD NEURON problem
   - Not zero-centred
+
+### Parametric ReLU (Leaky ReLU)
+<img width="800" height="auto" alt="image" src="https://github.com/user-attachments/assets/949bc940-f8a5-4d18-aa1e-5577253b8e83" />
+
+- Avoids the DEAD NEURON problem of ReLU by keeping Output a small value for x < 0.
+- Parametric ReLU(x) = max(alpha * x, x) where alpha is a hyperparameter with values 0.01, 0.02 etc
+- In Back Propagation, Derv(PRelu) is either small Positive number (for x < 0) or 1 (x>0)
+
+  #### Advantages of PReLU
+  - Solves Dead Nueron Problem of ReLU
+  - All advantages of ReLU
+ 
+  #### Disadvantages of PReLU
+  - Not Zero centred so weight updation is not efficient
+ 
+### Exponential Linear Unit (ELU)
+<img width="800" height="auto" alt="image" src="https://github.com/user-attachments/assets/b724619f-c7f0-4e34-96f5-521b35082807" />
+
+- In Forward propagation, ELU(x) = x for x>0; ELU(x) = $` \alpha (e^x - 1) `$ for x<0.
+- For Backward Propagation, Derv(ELU) is 0 - 1
+
+  #### Advantages of ELU
+  - Solves DEAD NEURON problem of RELU
+  - Zero-centred so efficient weight updation
+
+  #### Disadvatages of ELU
+  - Involves Exponential so bit resource/time-consuming than PReLU
+
+### SOFTMAX (Used in Output Layer For Multi-class classification Problem)
+- Consider below ANN that uses the SKLEARN IRIS dataset that takes Petal width & Sepal width as Input and classifies the flower into one of the 3 types- Setosa, Versicolor OR Virginica
+<img width="600" height="auto" alt="image" src="https://github.com/user-attachments/assets/08816c52-3413-433a-b12f-d791c5e6da2b" />
+
+- Here, the Outputs are Raw Output values (-infinity to +infinity) and when fed to Softmax function, they will be converted to Predicted Probabilities. So, **SOFTMAX converts Raw Output values (logits) to Predicted Probabilities**. Higher the Raw Value, higher is the Probability
+
+<img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/7d48c94c-c926-499f-a855-49e49bd32539" />
+<img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/f74b5b72-42cf-4fe0-b5b3-d1bd28a866e4" />
+<img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/c66df199-fa17-404c-823d-912e0d97aa38" />
+<img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/f4f6ceb2-7099-4e39-be6e-25a276513137" />
+<img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/79a0904d-94bb-41b1-afb8-208d4f540fc8" />
+<img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/29c61e93-c321-47a4-a825-0f1bff114fed" />
+
+- In General for K possible Classes, Softmax(Prob i belongs to K Class) = $` \Huge \frac{e^i}{\sum_{j=1}^i e^j} `$
+- All Raw Outputs values get converted to Probability value between 0 - 1
+- Sum of all SOFTMAX values = 1 (Since they are all probabilities)
+
+### Which Activation functions to use and when ??
+- For **HIDDEN LAYERS**, use **RELU/PReLU/ELU** (to avoid Vanishing Gradient problems of Sigmoid, Tanh)
+- For **OUTPUT LAYERS**
+  - Use **SIGMOID** for **BINARY Classification**
+  - Use **SOFTMAX** for **MULTI-CLASS Classification**
+  - Use **LINEAR or NO Function** for **REGRESSION**
