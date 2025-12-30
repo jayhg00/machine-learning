@@ -136,6 +136,9 @@ $` \eta (eta) `$: The **learning rate**, a small positive constant (e.g., 0.01) 
 - So, in $` \frac{\partial Loss}{\partial w_{1old}} = \frac{\partial Loss}{\partial O_{31}} * \frac{\partial O_{31}}{\partial O_{21}} * \frac{\partial O_{21}}{\partial O_{11}} * \frac{\partial O_{11}}{\partial w_{1old}}`$ due to Sigmoid Activation function, all other terms will be 0-0.25. And overall $` \frac{\partial Loss}{\partial w_{1old}} `$ will be a very small number (almost zero) and W_new will stop updating and not converge at all ==> This is **VANISHING GRADIENT PROBLEM**
 - So, **if the neural network is very deep (has many hidden layers) and each layer uses SIGMOID Activation function, this VANISHING GRADIENT Problem is Prominent and negatively affects Training of ANN** 
 
+<img width="645" height="auto" alt="image" src="https://github.com/user-attachments/assets/dfa0d560-2a98-4296-b630-939c7de0adc3" />
+
+
   #### Advantages of Sigmoid
   - Smooth gradient, preventing jumps in output values
   - Output values bound between 0 & 1, normalizing the output of each neuron
@@ -149,3 +152,36 @@ $` \eta (eta) `$: The **learning rate**, a small positive constant (e.g., 0.01) 
   - Involves Exponential so mathematical computation is resource/time-consuming
 
 - Due to these, **Sigmoid function is used only in Output Layer for Binary Classification**. And researchers started exploring other functions
+
+### Tanh Activation function
+<img width="650" height="auto" alt="image" src="https://github.com/user-attachments/assets/75dbbf36-52b5-4b7a-b96b-742e9bb9b741" />
+<img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/11c8774f-49e9-417f-b67d-64bfd41cd169" />
+<img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/1ae3eaf7-9a02-436f-91fd-57437e968ca6" />
+
+- for Forward Propagation, output is -1 to 1 and it is Zero-centred (passes through Origin.
+- For Backward Propagation, Derivative of Tanh is between 0-1 compared to 0-0.25 of Sigmoid. So, it is also susceptible to Vanishing Gradient Problem
+  #### Advantages of Tanh
+  - Zero-centred output so efficient weight updation
+
+  #### Disadvantages of Tanh
+  - susceptible to Vanishing Gradient Problem
+  - Involves multiple Exponentials so mathematical computation is resource/time-consuming
+ 
+### ReLU Activation Function (Rectified Linear Unit)
+<img width="663" height="auto" alt="image" src="https://github.com/user-attachments/assets/9969e964-08cf-40c5-b1ad-2375281e9387" />
+
+- For x < 0, ReLU(x) = 0; x > 0, ReLU(x) = x. So, can be written as ReLU(x) = max(0,input)
+- And Derv(ReLU) = 0 for x < 0, Derv(ReLU) = 1 for x >= 0
+
+<img width="450" height="auto" alt="image" src="https://github.com/user-attachments/assets/bf88e326-d38a-4c14-98c4-80a04a45d5f7" />
+<img width="550" height="auto" alt="image" src="https://github.com/user-attachments/assets/4c313da7-04bc-4bd8-aeeb-36518478e83d" />
+<img width="500" height="auto" alt="image" src="https://github.com/user-attachments/assets/9822ff32-e9a1-4123-9853-1b39c9eef09c" />
+
+- If **Derv(ReLU) is 0**, then **weights will not get updated** and it will be **DEAD NEURON**
+  #### Advantages of ReLU
+  - Solves Vanishing Gradient Problem
+  - ReLU(x) = max(0,x); Linear relationship and so superfast to calculate
+
+  #### Disadvantages of ReLU
+  - Prone to DEAD NEURON problem
+  - Not zero-centred
