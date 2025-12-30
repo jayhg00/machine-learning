@@ -135,3 +135,17 @@ $` \eta (eta) `$: The **learning rate**, a small positive constant (e.g., 0.01) 
 
 - So, in $` \frac{\partial Loss}{\partial w_{1old}} = \frac{\partial Loss}{\partial O_{31}} * \frac{\partial O_{31}}{\partial O_{21}} * \frac{\partial O_{21}}{\partial O_{11}} * \frac{\partial O_{11}}{\partial w_{1old}}`$ due to Sigmoid Activation function, all other terms will be 0-0.25. And overall $` \frac{\partial Loss}{\partial w_{1old}} `$ will be a very small number (almost zero) and W_new will stop updating and not converge at all ==> This is **VANISHING GRADIENT PROBLEM**
 - So, **if the neural network is very deep (has many hidden layers) and each layer uses SIGMOID Activation function, this VANISHING GRADIENT Problem is Prominent and negatively affects Training of ANN** 
+
+  #### Advantages of Sigmoid
+  - Smooth gradient, preventing jumps in output values
+  - Output values bound between 0 & 1, normalizing the output of each neuron
+  - Clear Prediction close to 0 or 1
+  - Suitable for Binary Classification
+  
+  #### Disadvatages of Sigmoid
+  - Prone to VANISHING GRADIENT Problem
+  - Function output is not zero-centred i.e. Efficient Weight updation does not happen. Zero-centred function passes through the Origin (0,0)
+    <img width="400" height="auto" alt="image" src="https://github.com/user-attachments/assets/126904b7-2b24-46c9-86a4-91c7f973b20b" />
+  - Involves Exponential so mathematical computation is resource/time-consuming
+
+- Due to these, **Sigmoid function is used only in Output Layer for Binary Classification**. And researchers started exploring other functions
