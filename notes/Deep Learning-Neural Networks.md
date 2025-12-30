@@ -126,3 +126,12 @@ $` \eta (eta) `$: The **learning rate**, a small positive constant (e.g., 0.01) 
   Then,  $` O_{31} = \sigma(z) `$
 
   And, $` \frac{\partial O_{31}}{\partial O_{21}} = \frac{\partial \sigma(z)}{\partial z} * \frac{\partial z}{\partial O_{21}}`$
+
+  And, $` \frac{\partial O_{31}}{\partial O_{21}} = \frac{\partial \sigma(z)}{\partial z} * \frac{\partial (w_{3}*O_{21}+b_{3})}{\partial O_{21}}`$
+
+  And, $` \frac{\partial O_{31}}{\partial O_{21}} = \frac{\partial \sigma(z)}{\partial z} * w_{3old}`$
+
+  Now, **Derivative of Sigmoid function is always between 0 - 0.25**. And W3 is also initialized to small value (0.01). So, overall $` \frac{\partial O_{31}}{\partial O_{21}} `$ will be very small.
+
+- So, in $` \frac{\partial Loss}{\partial w_{1old}} = \frac{\partial Loss}{\partial O_{31}} * \frac{\partial O_{31}}{\partial O_{21}} * \frac{\partial O_{21}}{\partial O_{11}} * \frac{\partial O_{11}}{\partial w_{1old}}`$ due to Sigmoid Activation function, all other terms will be 0-0.25. And overall $` \frac{\partial Loss}{\partial w_{1old}} `$ will be a very small number (almost zero) and W_new will stop updating and not converge at all ==> This is **VANISHING GRADIENT PROBLEM**
+- So, **if the neural network is very deep (has many hidden layers) and each layer uses SIGMOID Activation function, this VANISHING GRADIENT Problem is Prominent and negatively affects Training of ANN** 
