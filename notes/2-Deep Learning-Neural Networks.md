@@ -297,4 +297,32 @@ $` \eta (eta) `$: The **learning rate**, a small positive constant (e.g., 0.01) 
     
     <img width="700" height="auto" alt="image" src="https://github.com/user-attachments/assets/9975a3a2-a9ab-462f-86ee-25efb962c310" />
 
+### Exploding Gradient Problem
+- In **Vanishing Gradient** problem, when **Weights** are initialized at **low values** and **Sigmoid Activation function is used in Hidden Layers** and it is a Deep Neural Network (lots of hidden layers), the **weights stop updating** after multiple forward/back propagations 
+- In **Exploding Gradient** problem, when **Weights** are initialized at **high values**, then there is a chance that the new Weights are much bigger or much smaller which causes the **weights to go out of bounds and the Derivative never converges**
+  
+  <img width="900" height="auto" alt="image" src="https://github.com/user-attachments/assets/69aeec0d-e74c-4d66-9506-dfa1e4429490" />
 
+### Weight Initialization Techniques
+- Key points
+  - Weights Should be initialized small
+  - should NOT be same
+  - should have good variance
+
+- In Neural Network, 
+  - No of inputs = Column Dimension of Input X Matrix
+  - No of outputs = 1 (Binary Classification), N (multi-class classification)
+
+- Techniques-
+  1. UNIFORM DISTRIBUTION
+       - Weights = UniformDistr(-1/sqrt(no of input), 1/sqrt(no of input))
+  3. XAVIER/GLOROT INITIALIZATION
+     - Xavier Normal dist-
+          - Weights = N(0,sigma); sigma=sqrt(2/(input+output))
+     - Xavier Uniform dist-
+          - Weights = Uniform(-sqrt(6/(input+output)), sqrt(6/(input+output))
+  4. Kaiming He Initialization
+       - He Normal Dist-
+         - Weights = N(0,sigma); sigma=sqrt(2/input)
+       - He Uniform Dist-
+         - Weights = Uniform(-sqrt(6/input),sqrt(6/input))
