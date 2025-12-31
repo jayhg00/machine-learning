@@ -230,9 +230,53 @@ $` \eta (eta) `$: The **learning rate**, a small positive constant (e.g., 0.01) 
 - All Raw Outputs values get converted to Probability value between 0 - 1
 - Sum of all SOFTMAX values = 1 (Since they are all probabilities)
 
-### Which Activation functions to use and when ??
+### Which Activation/Loss functions to use and when ??
 - For **HIDDEN LAYERS**, use **RELU/PReLU/ELU** (to avoid Vanishing Gradient problems of Sigmoid, Tanh)
 - For **OUTPUT LAYERS**
   - Use **SIGMOID** for **BINARY Classification**
   - Use **SOFTMAX** for **MULTI-CLASS Classification**
   - Use **LINEAR or NO Function** for **REGRESSION**
+- For **LOSS FUNCTION**
+  - Use **BINARY CROSS ENTROPY** for **BINARY Classification**
+  - Use **CATEGORICAL CROSS ENTROPY** or **SPARSE CATEGORICAL CROSS ENTROPY** for **MULTI-CLASS Classification**
+  - Use **MSE, MAE, Huber Loss OR RMSE** for **REGRESSION**
+<img width="900" height="auto" alt="image" src="https://github.com/user-attachments/assets/3231dfce-382b-42ae-b9c6-b0c773d7d16b" />
+
+## OPTIMIZERS
+- They determine how the model's Weights are updated based on the Gradients (Partial Derivatives) of the Loss with respect to those Weights.
+- Examples
+  1. Gradient Descent Optimizer
+  2. Stochastic Gradient Descent Optimizer (SGD)
+  3. Mini-batch SGD
+  4. SGD with Momentum
+  5. AdaGrad/RMSProp
+  6. ADAM  (widely used)
+- In ANN, when **One Input Row (1 DataPoint or 1 RECORD)** is fed to do the **FORWARD PROPAGATION->LOSS EVAL->BACK PROPAGATION->WEIGHT UPDATION cycle**, it is called an **ITERATION**.
+- When the ANN has **seen all the Input Rows (All DataPoints/Records)** i.e. **FORWARD PROPAGATION->LOSS EVAL->BACK PROPAGATION->WEIGHT UPDATION cycle** has **completed for all the Input Rows**, it is called an **EPOCH**
+- Depending on how many Input Rows are fed to the ANN in an iteration, the number of EPOCHS and ITERATIONS varies
+ 
+  ### Gradient Descent optimizer
+  - If no. of Input Rows=1000, and **all 1000 will be fed at once** for **FORWARD PROPAGATION->LOSS EVAL->BACK PROPAGATION->WEIGHT UPDATION cycle**, then it is **1 ITERATION** in **1 EPOCH**. You specify the no of EPOCHS to repeat this to minimize the loss function
+  - Huge resources needed to compute weights for all datapoints at once
+
+  ### Stochastic Gradient Descent SGD
+  - if no. of datapoints=1000, and **each datapoint will be fed one by one** for  **FORWARD PROPAGATION->LOSS EVAL->BACK PROPAGATION->WEIGHT UPDATION cycle**. So, There will be **1000 ITERATIONS** in **1 EPOCH**. You specify the no of EPOCHS to repeat this to minimize the loss function
+	- Solves resource issue of Gradient optimizer
+	- High processing time since each iteration takes only one datapoint
+	- Noise gets introduced (Zigzag behavior around the Gradient Descent curve while moving towards global minima)
+    <img width="600" height="auto" alt="image" src="https://github.com/user-attachments/assets/c9d7914e-c7cd-4b03-afb8-04a5a47f0bda" />
+
+  ### Mini Batch SGD
+  - if no. of datapoints=1000 and **batch size=100**, **100 datapoint will be fed in batches** for **FORWARD PROPAGATION->LOSS EVAL->BACK PROPAGATION->WEIGHT UPDATION cycle**. There will be **10 ITERATIONS** in **1 EPOCH**
+	- Faster convergence than SGD
+	- Lesser noise than SGD but still exists
+
+  ### SGD With Momentum
+  - To smoothen the noise of SGD, Exponential Weighted/Moving Average of Past Gradients is taken. W-old and W-new are treated as Time Series i.e. W(t-1) & W(t)
+  <img width="350" height="auto" alt="image" src="https://github.com/user-attachments/assets/1fceee13-8146-41d6-a637-a39f15c88a70" />
+  <img width="450" height="auto" alt="image" src="https://github.com/user-attachments/assets/481b0615-be12-453d-8eac-4e62cf4f834f" />
+  <img width="951" height="auto" alt="image" src="https://github.com/user-attachments/assets/dbec697b-a22f-497f-9d16-b99c0fb2e2de" />
+  
+  
+
+
