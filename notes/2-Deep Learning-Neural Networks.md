@@ -326,3 +326,30 @@ $` \eta (eta) `$: The **learning rate**, a small positive constant (e.g., 0.01) 
          - Weights = N(0,sigma); sigma=sqrt(2/input)
        - He Uniform Dist-
          - Weights = Uniform(-sqrt(6/input),sqrt(6/input))
+
+### Dropout Layer to Prevent Overfitting
+- To prevent overfitting, some **random neurons** in each layer are **de-activated** during each **training iteration** forcing the network to learn more robust, independent features rather than relying on specific neurons, leading to better generalization on new data.
+- It's like training many smaller, thinned networks simultaneously, making the final model less complex and more resilient.
+- **During testing** (inference), **dropout is turned off (all neurons in ANN are active**) but **weights are scaled down** (or kept as is with "inverted dropout" during training) to compensate for the dropped nodes, ensuring consistent output.
+- **Dropout rate (Drop Probability)** is generally kept **0.2 for Input Layer** i.e. 20% of neurons in Input Layer are de-activated randomly in every iteration & **0.5 for Hidden Layers** i.e. 50% of neurons in Hidden Layer are de-activated randomly in every iteration
+
+  #### Dropout Example
+  _Note - Drop rates are taken higher than in reality to demonstrate the working_
+
+  During Training phase,
+  
+   <img width="800" height="auto" alt="image" src="https://github.com/user-attachments/assets/8ff3a49c-e3aa-4b65-89fb-bfb2d39db63d" />
+
+   - Keep Probability (KP) = 1 - Drop Probability(DP)
+   - In Input Layer, DP = 2/4 meaning 2 neurons are randomly de-activated in every iteration (Forward-Loss Eval-Back-WeightUpdation). In HL1, DP = 3/5 meaning 3 neurons are randomly de-activated. In HL2, DP = 2/4
+
+  During Testing phase,
+  - All Neurons are active
+  - Weights are scaled (multiplied by Keep Probability)
+  
+    <img width="800" height="auto" alt="image" src="https://github.com/user-attachments/assets/b3ac9b82-b4d7-4145-8241-15a046d50bdf" />
+
+    - Weights from Input Layer to HL1 are multipled by KP of Input Layer i.e. 0.5
+    - Weights from HL1 Layer to HL2 Layer are multipled by KP of HL1 Layer i.e. 0.4
+    - Weights from HL2 Layer to Output Layer are multipled by KP of HL2 Layer i.e. 0.5
+    
