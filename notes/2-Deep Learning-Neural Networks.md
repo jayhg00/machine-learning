@@ -261,22 +261,40 @@ $` \eta (eta) `$: The **learning rate**, a small positive constant (e.g., 0.01) 
 
   ### Stochastic Gradient Descent SGD
   - if no. of datapoints=1000, and **each datapoint will be fed one by one** for  **FORWARD PROPAGATION->LOSS EVAL->BACK PROPAGATION->WEIGHT UPDATION cycle**. So, There will be **1000 ITERATIONS** in **1 EPOCH**. You specify the no of EPOCHS to repeat this to minimize the loss function
-	- Solves resource issue of Gradient optimizer
-	- High processing time since each iteration takes only one datapoint
-	- Noise gets introduced (Zigzag behavior around the Gradient Descent curve while moving towards global minima)
-    <img width="600" height="auto" alt="image" src="https://github.com/user-attachments/assets/c9d7914e-c7cd-4b03-afb8-04a5a47f0bda" />
+  - Solves resource issue of Gradient optimizer
+  - High processing time since each iteration takes only one datapoint
+  - Noise gets introduced (Zigzag behavior around the Gradient Descent curve while moving towards global minima)
+  <img width="600" height="auto" alt="image" src="https://github.com/user-attachments/assets/c9d7914e-c7cd-4b03-afb8-04a5a47f0bda" />
 
   ### Mini Batch SGD
   - if no. of datapoints=1000 and **batch size=100**, **100 datapoint will be fed in batches** for **FORWARD PROPAGATION->LOSS EVAL->BACK PROPAGATION->WEIGHT UPDATION cycle**. There will be **10 ITERATIONS** in **1 EPOCH**
-	- Faster convergence than SGD
-	- Lesser noise than SGD but still exists
+  - Faster convergence than SGD
+  - Lesser noise than SGD but still exists
 
   ### SGD With Momentum
   - To smoothen the noise of SGD, Exponential Weighted/Moving Average of Past Gradients is taken. W-old and W-new are treated as Time Series i.e. W(t-1) & W(t)
   <img width="350" height="auto" alt="image" src="https://github.com/user-attachments/assets/1fceee13-8146-41d6-a637-a39f15c88a70" />
   <img width="450" height="auto" alt="image" src="https://github.com/user-attachments/assets/481b0615-be12-453d-8eac-4e62cf4f834f" />
-  <img width="951" height="auto" alt="image" src="https://github.com/user-attachments/assets/dbec697b-a22f-497f-9d16-b99c0fb2e2de" />
+  <img width="800" height="auto" alt="image" src="https://github.com/user-attachments/assets/dbec697b-a22f-497f-9d16-b99c0fb2e2de" />
   
-  
+  ### Adagrad (Adaptive Gradient Descent)-
+  - **Dynamic Learning Rate** Eta.
+  - Improves speed of convergence.
+  - Initially, Eta can be high (0.01) to move quickly to global minima and then it reduces as we move closer to global minima. 
+  - Disdvantage- Due to formula of Eta-new (inversely prop to Alpha(t)), as Alpha(t) becomes very large, then Eta-new will be approx. 0 and so Weight updation stops.
+    
+    <img width="800" height="auto" alt="image" src="https://github.com/user-attachments/assets/436d372c-7896-4507-b657-bfbe9d3e2b46" />
+
+ 
+  ### AdaDelta & RMSPROP-
+  - To prevent Alpha(t) of Adagrad from becoming very high, Exponential Weighted Average is applied to Alpha(t) and is called Sdw
+    
+  <img width="700" height="auto" alt="image" src="https://github.com/user-attachments/assets/c669cc9d-ef2e-4ade-a243-b95fcbf48740" />
+
+  ### Adam optimizer (Most Widely used)-
+  - Combines all the strengths of **SGD with Momentum + RMSPROP (Smoothening + Dynamic Learning Rate)**
+  - Most widely used
+    
+    <img width="700" height="auto" alt="image" src="https://github.com/user-attachments/assets/9975a3a2-a9ab-462f-86ee-25efb962c310" />
 
 
