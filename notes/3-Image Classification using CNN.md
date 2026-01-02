@@ -24,41 +24,48 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
   #### Convolution + Pooling example
   - Consider a Black and white images of size **6 x 6 pixels** of letter 'O' & 'X'. White pixel is denoted by 0 while black pixel is denoted by 1.
     
-    <img width="300" height="auto" alt="image" src="https://github.com/user-attachments/assets/1afad3d0-6448-49e7-8298-d067c1f91779" />
-    <img width="300" height="auto" alt="image" src="https://github.com/user-attachments/assets/5cc4e698-fbb7-42ea-a407-679bae7fc619" />
+    <kbd><img width="300" height="auto" alt="image" src="https://github.com/user-attachments/assets/1afad3d0-6448-49e7-8298-d067c1f91779" /></kbd>
+    <kbd><img width="300" height="auto" alt="image" src="https://github.com/user-attachments/assets/5cc4e698-fbb7-42ea-a407-679bae7fc619" /></kbd>
 
   - We start with trying to identify 'O'. Lets obtain a filter as shown of size 3x3 pixels and overlay it on the left most corner of the image. Perform DOT PRODUCT (Multiply pixel-wise and add) to get value of +3 and add a bias of -2. This gives value of 1 for the 1st element in FEATURE-MAP
     
-    <img width="700" height="auto" alt="image" src="https://github.com/user-attachments/assets/da7a44ff-9b71-4393-870e-8e730e6d1397" />
+    <kbd><img width="700" height="auto" alt="image" src="https://github.com/user-attachments/assets/da7a44ff-9b71-4393-870e-8e730e6d1397" /></kbd>
 
   - Next, slide the filter to the right by 1 pixel. Perform DOT PRODUCT to get value of +1 and add bias of -2. This gives value of -1 for 2nd element in FEATURE-MAP
     
-    <img width="700" height="auto" alt="image" src="https://github.com/user-attachments/assets/cbe0c5fd-330e-4144-ab5d-a186c8a766c6" />
+    <kbd><img width="700" height="auto" alt="image" src="https://github.com/user-attachments/assets/cbe0c5fd-330e-4144-ab5d-a186c8a766c6" /></kbd>
 
-  - Keep sliding the filter and repeat to get all the values of the 4x4 FEATURE-MAP
+  - Keep sliding the filter and repeat to get all the values of the **4x4 FEATURE-MAP**
 
-    <img width="200" height="auto" alt="image" src="https://github.com/user-attachments/assets/b2b98e18-328a-4ff2-9a54-e731b98e4678" />
+    <kbd><img width="200" height="auto" alt="image" src="https://github.com/user-attachments/assets/b2b98e18-328a-4ff2-9a54-e731b98e4678" /></kbd>
 
-  - Next, Pass the 4x4 FEATURE-MAP through ReLU activation function. All -ve values will become 0 while +ve values will retain their value
+  - Next, Pass the 4x4 FEATURE-MAP through **ReLU activation** function. All -ve values will become 0 while +ve values will retain their value
 
-    <img width="600" height="auto" alt="image" src="https://github.com/user-attachments/assets/9e569c12-eb2f-4752-ae3e-012a5c8fcce3" />
+    <kbd><img width="600" height="auto" alt="image" src="https://github.com/user-attachments/assets/9e569c12-eb2f-4752-ae3e-012a5c8fcce3" /></kbd>
 
-  - Next, Apply POOLING filter of 2x2 pixels on this 4x4 FEATURE-MAP Post ReLU. Pooling filter slides such that pixels of the base do not overlap. POOLING here is MAX Pooling which is to take the max value in the Overlay
+  - Next, Apply **POOLING filter of 2x2 pixels** on this 4x4 FEATURE-MAP Post ReLU. Pooling filter slides such that pixels of the base do not overlap. POOLING here is **MAX Pooling** which is to take the max value in the Overlay
 
     <img width="200" height="auto" alt="image" src="https://github.com/user-attachments/assets/4e2d6b42-fc7d-4d8f-b918-7ca816387f3f" />
     <img width="200" height="auto" alt="image" src="https://github.com/user-attachments/assets/3796410d-d088-40d4-968e-3f28c6b2eb58" />
     <img width="200" height="auto" alt="image" src="https://github.com/user-attachments/assets/85341bcd-6d1b-47a1-8cda-01e98b9b307c" />
     <img width="200" height="auto" alt="image" src="https://github.com/user-attachments/assets/f9719391-ca88-44a4-b714-790609c3371f" />
 
-  - This gives the 2x2 POOLED FEATURE-MAP which is the 4-input Vector to a regular Neural Network
+  - This gives the **2x2 POOLED FEATURE-MAP** which is the 4-input Vector to a regular Neural Network
     
-    <img width="156" height="auto" alt="image" src="https://github.com/user-attachments/assets/931f256c-a72f-4bac-92d0-0f351624184d" />
+    <kbd><img width="156" height="auto" alt="image" src="https://github.com/user-attachments/assets/931f256c-a72f-4bac-92d0-0f351624184d" /></kbd>
 
   - Consider the Neural Network. It has 4 input nodes,  1 Hidden Layer with 1 node using ReLU activation function and 2 Output nodes (one for letter 'O', one for letter 'X'). The Weights & Bias are pre-determined to correctly identify 'X' or 'O'.
 
-    <img width="700" height="auto" alt="image" src="https://github.com/user-attachments/assets/0689da01-bd76-4962-9d4d-2d9ceca858a6" />
+    <kbd><img width="700" height="auto" alt="image" src="https://github.com/user-attachments/assets/0689da01-bd76-4962-9d4d-2d9ceca858a6" /> </kbd>
 
-    Applying the inputs [1,0,0,1] and weights/bias, input to Relu function is 0.34 which will output 0.34. Further weights/bias will output 1 in Node 'O' and 0 in Node 'X'. So, it correctly predicted that the input image is an 'O'
+  - Applying the inputs [1,0,0,1] and weights/bias, input to Relu function is 0.34 which will output 0.34. Further weights/bias will output 1 in Node 'O' and 0 in Node 'X'. So, it correctly predicted that the input image is an 'O'
 
-    <img width="700" height="auto" alt="image" src="https://github.com/user-attachments/assets/f8a346a9-fc8a-45e7-b5b4-dbd5317159e0" />
+    <kbd><img width="700" height="auto" alt="image" src="https://github.com/user-attachments/assets/f8a346a9-fc8a-45e7-b5b4-dbd5317159e0" /> </kbd>
 
+  - Similarly, if we input image of **letter 'X'** to the same NN (same weights/bias), the Feature-map, Pooled Feature-map, input to the NN & Output of NN is as below and it correctly predicts letter 'X'
+
+    <kbd><img width="900" height="auto" alt="image" src="https://github.com/user-attachments/assets/94ffd8ba-c499-482e-95e7-c72f21bdbc1c" /></kbd>
+
+  - Now, if the input image is of **shifted letter 'X'** (shifted to right by 1 pixel) to the same NN (same weights/bias), the Feature-map, Pooled Feature-map, input to the NN & Output of NN is as below and it correctly predicts letter 'X' (Output is 1.23 for 'X' vs -0.2 for 'O'). This is possible because of the Convolution with the filter & Pooling process
+
+    <kbd><img width="900" height="auto" alt="image" src="https://github.com/user-attachments/assets/3ab85b6f-d408-498e-937c-42ebade60150" /></kbd>
