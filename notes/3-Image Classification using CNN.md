@@ -69,3 +69,81 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
   - Now, if the input image is of **shifted letter 'X'** (shifted to right by 1 pixel) to the same NN (same weights/bias), the Feature-map, Pooled Feature-map, input to the NN & Output of NN is as below and it correctly predicts letter 'X' (Output is 1.23 for 'X' vs -0.2 for 'O'). This is possible because of the Convolution with the filter & Pooling process
 
     <kbd><img width="900" height="auto" alt="image" src="https://github.com/user-attachments/assets/3ab85b6f-d408-498e-937c-42ebade60150" /></kbd>
+
+<hr/>
+
+## Real world use-case: Fashion Classification
+- Use Case: We have a website and the user wants to create a listing in the fashion category. For example, he wants to sell a t-shirt. He uploads a picture and there is a fashion classification service which will get this picture and reply with a suggested category (here: t-shirt).
+- This classification service will contain a neural network which will look at the image and predict a category for this image. (out of 10 most popular classe like T-shirts, pants, shirts etc)
+- The Images to Train, Validate, Test our model is located in this Github repo "https://github.com/alexeygrigorev/clothing-dataset-small". Within this repo, you have seperate folders for Train, Validate, Test. Within Train, Validate, Test, you have the 1 folder for each class (pants, t-shirt, shirt, etc) containing respective images
+- To train and use a CNN, we need to use TENSORFLOW (Open source Deep Learning Framework by Google) + KERAS (high-level API built over TensorFlow). It can be run on a powerful CPU or a GPU. Install Tensorflow using ``` pip install tensorflow ``` cmd.
+
+### Loading the image
+- Import specific libraries to support image processing & ML
+  ```Python
+  import numpy as np
+  import matplotlib.pyplot as plt
+   
+  %matplotlib inline
+   
+  import tensorflow as tf
+  from tensorflow import keras
+  from tensorflow.keras.preprocessing.image import load_img
+  ```
+  
+- Load an image using PIL (Python Image Library). We resize the image to 150x150 to speed up Training
+  ```Python
+  path = './clothing-dataset-small/train/t-shirt'
+  name = '5f0a3fa0-6a3d-4b68-b213-72766a643de7.jpg'
+  fullname = f'{path}/{name}'
+  img = load_img(fullname, target_size=(150, 150))  # Resize to smaller size to speed up Training
+  print(img)
+  img
+  ```
+  <img width="auto" height="250" alt="image" src="https://github.com/user-attachments/assets/2e113453-b59c-48d0-bed1-35e01d21b065" />
+  
+  ```Python
+  # Output: <PIL.Image.Image image mode=RGB size=150x150 at 0x7F8593FA2E20>
+  ```
+
+- Translate image to Numpy array. Each pixel has 3 channels (RGB). So, each pixel is represented by 3 values between 0-255. Shape of the Numpy Array will be (150,150,3) [Height, Width, # of channels]
+  ```
+  x = np.array(img)
+  x
+   
+  # Output:
+  # array([[[179, 171,  99],
+  #         [179, 171,  99],
+  #         [181, 173, 101],
+  #         ...,
+  #         [251, 253, 248],
+  #         [251, 253, 248],
+  #         [251, 254, 247]],
+  #
+  #        [[188, 179, 112],
+  #         [187, 178, 111],
+  #         [186, 177, 108],
+  #         ...,
+  #         [251, 252, 247],
+  #         [251, 252, 247],
+  #         [251, 252, 246]],
+  #
+  #        [[199, 189, 127],
+  #         [200, 190, 128],
+  #         [200, 191, 126],
+  #         ...,
+  #         [250, 251, 245],
+  #         [250, 251, 245],
+  #         [250, 251, 245]],
+  #
+  #        ...,
+  # ...
+  #         [171, 157,  82],
+  #         ...,
+  #         [181, 133,  22],
+  #         [179, 131,  20],
+  #         [182, 134,  23]]], dtype=uint8)
+
+  x.shape
+  # Output: (150, 150, 3)
+  ```
