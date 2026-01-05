@@ -215,5 +215,7 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
   As per the default Xception model, the image is classified as a Jersey which is not right. In fact, if you see the list of the 1000 classes that ImageNet uses, there is no class like "T-Shirt", "Shirt", "Pants" etc in it and hence it does not work for our use-case. However, we need not train a new model from scratch. We can re-use the Pre-trained model and adapt it to our use-case
 
 ### TRANSFER LEARNING
-
-  
+- In a CNN, the CONVOLUTION+POOLING layer converts input image to 1-D VECTOR Representation and then fed to DENSE Layers that do the predictions.
+- The CONVOLUTION+POOLING layer is Generic and applicable to any image irrespective to use-case.
+- The DENSE Layer is use-case specific and depends on the Image data that was used for Training
+- So, we can **keep the CONVOLUTION+POOLING layer** of the Pre-trained model and **train new DENSE layers**. This is the concept of **TRANSFER LEARNING**
