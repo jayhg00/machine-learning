@@ -76,7 +76,7 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
 - Use Case: We have a website and the user wants to create a listing in the fashion category. For example, he wants to sell a t-shirt. He uploads a picture and there is a fashion classification service which will get this picture and reply with a suggested category (here: t-shirt).
 - This classification service will contain a neural network which will look at the image and predict a category for this image. (out of 10 most popular classe like T-shirts, pants, shirts etc)
 - The Images to Train, Validate, Test our model is located in this Github repo "https://github.com/alexeygrigorev/clothing-dataset-small". Within this repo, you have seperate folders for Train, Validate, Test. Within Train, Validate, Test, you have the 1 folder for each class (pants, t-shirt, shirt, etc) containing respective images
-- To train and use a CNN, we need to use TENSORFLOW (Open source Deep Learning Framework by Google) + KERAS (high-level API built over TensorFlow). It can be run on a powerful CPU or a GPU. Install Tensorflow using ``` pip install tensorflow ``` cmd.
+- To train and use a CNN, we need to use TENSORFLOW (Open source Deep Learning Framework by Google) + KERAS (high-level API built over TensorFlow). It can be run on a powerful CPU or a GPU. Starting with Tensorflow v2.0, Keras is built into Tensorflow. So, install Tensorflow using ``` pip install tensorflow ``` cmd.
 
 ### Loading the image
 - Import specific libraries to support image processing & ML
@@ -107,7 +107,7 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
   ```
 
 - Translate image to Numpy array. Each pixel has 3 channels (RGB). So, each pixel is represented by 3 values between 0-255. Shape of the Numpy Array will be (150,150,3) [Height, Width, # of channels]
-  ```
+  ```Python
   x = np.array(img)
   x
    
@@ -127,17 +127,7 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
   #         [251, 252, 247],
   #         [251, 252, 247],
   #         [251, 252, 246]],
-  #
-  #        [[199, 189, 127],
-  #         [200, 190, 128],
-  #         [200, 191, 126],
-  #         ...,
-  #         [250, 251, 245],
-  #         [250, 251, 245],
-  #         [250, 251, 245]],
-  #
-  #        ...,
-  # ...
+  #       ...,
   #         [171, 157,  82],
   #         ...,
   #         [181, 133,  22],
@@ -147,3 +137,83 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
   x.shape
   # Output: (150, 150, 3)
   ```
+
+### Pre-trained Convolutional Neural Networks
+- These are CNNs that are already trained on huge dataset of images by somebody else and can be used to classify into 1000s of classes. If the Pre-trained CNN has classes as per our use-case, then we can use them for inference. If the Pre-trained CNN **does not** have classes as per our use-case, then we can **re-use the base Convolution layer** of the Pre-trained CNN to convert our images to vector representation and **replace Pre-trained CNN's Dense layer/Output Classes with our custom-defined Dense layers & Output Classes**. This is called **TRANSFER LEARNING**
+- Keras provides many Pre-trained models that we can use for prediction, feature extraction, and fine-tuning https://keras.io/api/applications/. One of them is Xception.
+
+#### Using Xception to predict our images
+- Import Xception model libraries
+  ```Python
+  from tensorflow.keras.applications.xception import Xception
+  from tensorflow.keras.applications.xception import preprocess_input
+  from tensorflow.keras.applications.xception import decode_predictions
+   
+  # weights = "imagenet" means we want to use pre-trained network that was trained on imagenet
+   
+  model = Xception(
+      weights="imagenet",
+      input_shape=(150, 150, 3)
+  )
+  ```
+- Let us Classify our image using Xception's built-in classes. Xception model expects a bunch of images as input. So, we'll supply only one image. And, also pre-process our input image the same way as done during the Xception training
+  ```Python
+  X = np.array([x])
+  X.shape
+  # Output: (1, 150, 150, 3)
+
+  X = preprocess_input(X)
+  X[0]
+  # Output:
+  # array([[[ 0.4039216 ,  0.3411765 , -0.2235294 ],
+  #            [ 0.4039216 ,  0.3411765 , -0.2235294 ],
+  #            [ 0.41960788,  0.35686278, -0.20784312],
+  #            ...,
+  #            [ 0.96862745,  0.9843137 ,  0.94509804],
+  #            [ 0.96862745,  0.9843137 ,  0.94509804],
+  #            [ 0.96862745,  0.99215686,  0.9372549 ]],
+  #
+  #            [[ 0.47450984,  0.4039216 , -0.12156862],
+  #            [ 0.4666667 ,  0.39607847, -0.12941176],
+  #            [ 0.45882356,  0.38823533, -0.15294117],
+  #             ...,
+  #            [ 0.96862745,  0.9764706 ,  0.9372549 ],
+  #            [ 0.96862745,  0.9764706 ,  0.9372549 ],
+  #            [ 0.96862745,  0.9764706 ,  0.92941177]],
+  #             ...,
+  #            [ 0.41960788,  0.04313731, -0.827451  ],
+  #            [ 0.4039216 ,  0.02745104, -0.84313726],
+  #            [ 0.427451  ,  0.05098045, -0.81960785]]], dtype=float32)
+  ```
+- Predict our image's class using model.predict(). pred.Shape() is (1,1000) meaning there is 1 Prediction and Probabilities for each of the 1000 built-in classes
+  ```Python
+  pred = model.predict(X)
+  # 1/1 [==============================] - 2s 2s/step
+
+  pred.shape 
+  # (1, 1000)
+
+  pred 
+  # Output:
+  # array([[3.23712389e-04, 1.57383955e-04, 2.13493346e-04, 1.52370616e-04,
+  #            2.47626507e-04, 3.05036228e-04, 3.20592342e-04, 1.47499406e-04,
+  #    ...
+  #            3.20827705e-04, 2.70084536e-04, 3.43746680e-04, 2.48680328e-04,
+  #            2.78319319e-04, 3.25885747e-04, 1.71753796e-04, 1.73037348e-04]],
+  #           dtype=float32)
+  ```
+- Decode the Predictions i.e. relate the 1000 probabilities with their respective classes to make output human readable
+  ```Python
+  decode_predictions(pred)
+  # Output:
+  # [[('n03595614', 'jersey', 0.6819631),
+  #   ('n02916936', 'bulletproof_vest', 0.038140077),
+  #   ('n04370456', 'sweatshirt', 0.034324776),
+  #   ('n03710637', 'maillot', 0.011354236),
+  #   ('n04525038', 'velvet', 0.0018453619)]]
+  ```
+  As per the default Xception model, the image is classified as a Jersey which is not right. In fact, if you see the list of the 1000 classes that ImageNet uses, there is no class like "T-Shirt", "Shirt", "Pants" etc in it and hence it does not work for our use-case. However, we need not train a new model from scratch. We can re-use the Pre-trained model and adapt it to our use-case
+
+### TRANSFER LEARNING
+
+  
