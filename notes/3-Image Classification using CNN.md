@@ -336,7 +336,7 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
   33     
   34     return model
   ```
-    - Function takes learning_rate, size of hidden layer(no of nodes in hidden layer), Dropout rate
+    - Function takes **learning_rate**, size of hidden layer(no of nodes in hidden layer), **Dropout** rate.
     - base_model is the Xception model trained with weights of ImageNet. In Keras, the neural network is visualized from bottom to top with Input & convolution layer at Bottom and Dense & Output Layers on the Top.
       <kbd><img width="600" height="auto" alt="image" src="https://github.com/user-attachments/assets/93362f96-e708-4f5c-a025-1af036c7fb85" /></kbd>
 
@@ -366,5 +366,53 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
     
     history = model.fit(train_ds, epochs=20, validation_data=val_ds)
     ```
-      - You need to specify no of Epochs. 1 EPOCH is when the model has gone through all of the Training data once. EPOCH = 10 means the model will go through the Training dataset 20 times to optimize the weights/biases
-      - model.fit() returns a history of all the training steps. 
+      - You need to specify no of Epochs. 1 EPOCH is when the model has gone through all of the Training data once. EPOCH = 10 means the model will go through the Training dataset 10 times to optimize the weights/biases
+      - model.fit() returns a history of all the training steps. Note the Training Accuracy, Val_loss & Val_accuracy. After each EPOCH, Val_loss should generally reduce while Training Accuracy & Validation Accuracy should increase. Training no of steps = 96 batches because Training Images were 3068, divide it by 32 will need 96 batches. Validation no of steps = 11 batches because Validation images were 341, divide it by 32 will need 11 batches
+    ```Python
+    Train for 96 steps, validate for 11 steps
+    Epoch 1/10
+    96/96 [==============================] - 21s 216ms/step - loss: 1.1353 - accuracy: 0.6170 - val_loss: 0.7258 - val_accuracy: 0.7801
+    Epoch 2/10
+    96/96 [==============================] - 16s 168ms/step - loss: 0.6469 - accuracy: 0.7735 - val_loss: 0.6332 - val_accuracy: 0.7859
+    Epoch 3/10
+    96/96 [==============================] - 16s 169ms/step - loss: 0.5182 - accuracy: 0.8243 - val_loss: 0.5905 - val_accuracy: 0.8094
+    Epoch 4/10
+    96/96 [==============================] - 16s 170ms/step - loss: 0.4390 - accuracy: 0.8553 - val_loss: 0.5550 - val_accuracy: 0.8152
+    Epoch 5/10
+    96/96 [==============================] - 16s 170ms/step - loss: 0.3827 - accuracy: 0.8827 - val_loss: 0.5437 - val_accuracy: 0.8211
+    Epoch 6/10
+    96/96 [==============================] - 16s 170ms/step - loss: 0.3342 - accuracy: 0.8990 - val_loss: 0.5319 - val_accuracy: 0.8358
+    Epoch 7/10
+    96/96 [==============================] - 16s 166ms/step - loss: 0.2978 - accuracy: 0.9149 - val_loss: 0.5169 - val_accuracy: 0.8299
+    Epoch 8/10
+    96/96 [==============================] - 16s 166ms/step - loss: 0.2652 - accuracy: 0.9283 - val_loss: 0.5422 - val_accuracy: 0.8299
+    Epoch 9/10
+    96/96 [==============================] - 16s 166ms/step - loss: 0.2419 - accuracy: 0.9387 - val_loss: 0.5234 - val_accuracy: 0.8211
+    Epoch 10/10
+    96/96 [==============================] - 16s 166ms/step - loss: 0.2157 - accuracy: 0.9498 - val_loss: 0.5320 - val_accuracy: 0.8328
+    ```
+  - You can try different values for learning rate, inner layer, dropout rate; capture the val_accuracy score for each value and compare the plots. in below example, we try different values for Dropout rate:-
+    ```Python
+    learning_rate = 0.001
+    size = 100
+    
+    scores = {}
+    
+    for droprate in [0.0, 0.2, 0.5, 0.8]:
+        model = make_model(
+            learning_rate=learning_rate,
+            size_inner=size,
+            droprate=droprate
+        )
+        history = model.fit(train_ds, epochs=30, validation_data=val_ds)
+        scores[droprate] = history.history
+
+    for droprate, hist in scores.items():
+      plt.plot(hist['val_accuracy'], label=('val=%s' % droprate))
+  
+    plt.ylim(0.78, 0.86)
+    plt.legend()
+    ```
+    <img width="380" height="252" alt="image" src="https://github.com/user-attachments/assets/6f2f663a-7fde-4bf3-92b0-cf89e1233e47" />
+
+    Dropout of 0.0 or 0.2 is more consistent.
