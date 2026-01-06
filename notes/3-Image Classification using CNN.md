@@ -298,3 +298,7 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
   # Output: Found 341 images belonging to 10 classes.
   ```
   
+  #### Training the Xception model on our images
+  
+  ```
+  
