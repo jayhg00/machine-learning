@@ -219,3 +219,82 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
 - The CONVOLUTION+POOLING layer is Generic and applicable to any image irrespective to use-case.
 - The DENSE Layer is use-case specific and depends on the Image data that was used for Training
 - So, we can **keep the CONVOLUTION+POOLING layer** of the Pre-trained model and **train new DENSE layers**. This is the concept of **TRANSFER LEARNING**
+
+  #### Reading training data using ImageDataGenerator
+  ```Python
+  from tensorflow.keras.preprocessing.image import ImageDataGenerator
+   
+  train_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
+   
+  train_ds = train_gen.flow_from_directory(
+      './clothing-dataset-small/train',
+      target_size=(150, 150),
+      batch_size=32
+  )
+   
+  # Output: Found 3068 images belonging to 10 classes.
+  ```
+    - Instantiate ImageDataGenerator by providing the preprocessing function
+    - Read the training images from "train" folder in batch of 32 and resize to 150x150
+    - Total of 3068 images are present among 10 classes ("pant", "shirt", t-shirt" etc)
+  
+  - To know the order of the classes, use train_ds.class_indices. "dress" is at index 0, hat is at 1 and so on. The names are inferred from the folder structure
+  ```Python
+  train_ds.class_indices
+   
+  # Output: 
+  # {'dress': 0,
+  #  'hat': 1,
+  #  'longsleeve': 2,
+  #  'outwear': 3,
+  #  'pants': 4,
+  #  'shirt': 5,
+  #  'shoes': 6,
+  #  'shorts': 7,
+  #  'skirt': 8,
+  #  't-shirt': 9}
+  ```
+  - Now, train_ds is an iterator which returns the 32 images of the batch and the class that it belongs to.
+  ```Python
+  X, y = next(train_ds)
+
+  X
+  # Output:
+  # array([[[[ 0.30980396,  0.20784318,  0.13725495],
+  #            [ 0.30980396,  0.16078436,  0.20784318],
+  #            [ 0.22352946,  0.04313731,  0.10588241],
+  #        ...,
+  #            [ 0.32549024,  0.05882359, -0.70980394],
+  #            [ 0.3176471 ,  0.07450986, -0.6392157 ],
+  #            [ 0.3176471 ,  0.09019613, -0.6313726 ]]]], dtype=float32)
+   
+  X.shape     
+  # Output: (32, 150, 150, 3)
+
+  y
+  # Output:
+  # array([[0., 0., 0., 0., 0., 0., 0., 0., 0., 1.],
+  #             [0., 0., 0., 0., 0., 0., 0., 0., 0., 1.],
+  #             [0., 0., 0., 0., 0., 0., 0., 0., 0., 1.],
+  #             [0., 0., 0., 0., 1., 0., 0., 0., 0., 0.],
+  #             [0., 0., 0., 0., 0., 0., 1., 0., 0., 0.]], dtype=float32)
+
+  y.shape
+  # Output: (32, 10)
+  ```
+    - y is like one-hot encoded. If 1st image is a t-shirt, then index 9 is 1 while all other elements are 0. If 4th image is Pants, then index 4 is 1 and all other elements are 0
+
+  - Similarly, we create the Validation Dataset. It contains 341 images belonging to 10 classes
+  ```Python
+  val_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
+   
+  val_ds = val_gen.flow_from_directory(
+      './clothing-dataset-small/validation',
+      target_size=(150, 150),
+      batch_size=32,
+      shuffle=False
+  )
+   
+  # Output: Found 341 images belonging to 10 classes.
+  ```
+  
