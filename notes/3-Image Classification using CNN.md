@@ -416,3 +416,23 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
     <img width="380" height="252" alt="image" src="https://github.com/user-attachments/assets/6f2f663a-7fde-4bf3-92b0-cf89e1233e47" />
 
     Dropout of 0.0 or 0.2 is more consistent.
+
+  ### Data Augmentation
+  - This is to make the Training more robust by applying image transformation like Flipping, Rotation, Shear, Zoom in/out etc on existing images and creating new images.
+  - This way, the number of Training images will also increase and also will learn from not-so-perfect images.
+  - Augmentation is applied via ImageDataGenerator on train_gen
+    ```Python
+    train_gen = ImageDataGenerator(
+      preprocessing_function=preprocess_input,
+      shear_range=10,
+      zoom_range=0.1,
+      horizontal_flip=True
+    )
+    ```
+  - How to select data augmentations?
+    - Use your own judgement (does is make sense?) –> For example if you don’t expect to see horizontally flipped images, then this wouldn’t make sense here as well.
+    - Look at the dataset, what kind of variations are there?
+    - Are the objects always centered? –> If not you can think about shifting and rotation.
+    - Tune it as a hyperparameter – Try different augmentations and see what works and what doesn’t.
+    - Train it with new augmentation for 10-20 epochs. If it’s better then use it, if not then don’t use it. If it’s the same or similar result then train for some more epochs (like 20) and make the comparison again.
+    
