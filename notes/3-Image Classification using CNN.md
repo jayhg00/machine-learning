@@ -298,7 +298,73 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
   # Output: Found 341 images belonging to 10 classes.
   ```
   
-  #### Training the Xception model on our images
-  
+  #### Training the Xception model for our use-case
+  - We define a make_model function
+  ```Python
+  1   def make_model(learning_rate=0.01, size_inner=100, droprate=0.5):
+  2     base_model = Xception(
+  3         weights='imagenet',
+  4         include_top=False,
+  5         input_shape=(150, 150, 3)
+  6     )
+  7 
+  8     base_model.trainable = False
+  9 
+  10     #### CUSTOM DENSE LAYER ######
+  11 
+  12     inputs = keras.Input(shape=(150, 150, 3))
+  13     base = base_model(inputs, training=False)
+  14     vectors = keras.layers.GlobalAveragePooling2D()(base)
+  15     
+  16     inner = keras.layers.Dense(size_inner, activation='relu')(vectors)
+  17     drop = keras.layers.Dropout(droprate)(inner)
+  18     
+  19     outputs = keras.layers.Dense(10)(drop)
+  20     
+  21     model = keras.Model(inputs, outputs)
+  22     
+  23     #########################################
+  24 
+  25     optimizer = keras.optimizers.Adam(learning_rate=learning_rate)
+  26     loss = keras.losses.CategoricalCrossentropy(from_logits=True)
+  27 
+  28     model.compile(
+  29         optimizer=optimizer,
+  30         loss=loss,
+  31         metrics=['accuracy']
+  32     )
+  33     
+  34     return model
   ```
-  
+    - Function takes learning_rate, size of hidden layer(no of nodes in hidden layer), Dropout rate
+    - base_model is the Xception model trained with weights of ImageNet. In Keras, the neural network is visualized from bottom to top with Input & convolution layer at Bottom and Dense & Output Layers on the Top.
+      <kbd><img width="600" height="auto" alt="image" src="https://github.com/user-attachments/assets/93362f96-e708-4f5c-a025-1af036c7fb85" /></kbd>
+
+      As we dont want the default Dense Layers of the Xception model, we set include_top = False. Also, we dont want to overwrite the weights of the Base Convolution Model, so we set base_model.trainable = False
+    - Then, we define the model Architecture. Code above uses the **FUNCTIONAL MODEL** syntax where variables in one line are passed as arguments to the layer in next line.
+      - Input is 150x150x3
+      - 'input' goes to base_model and gives output 'base'
+      - 'base' goes to 'vectors' base is converted to vectors by POOLING Layer GlobalAveragePooling2D().
+      - 'vectors' goes to 'inner'. 'inner' is the Hidden Layer. Default number of nodes in it is 100. Each node has ReLU as Output Activation function
+      - 'inner' goes to 'drop'. Dropout layer with Default droprate = 0.5 is between 'inner' and the Output layer
+      - 'drop' goes to 'output. Output layer is Dense Layer with 10 nodes (since we have 10 prediction classes)
+      - model builds Dense model using 'input', 'output'
+      - Optimizer is Adam with default learning rate = 0.01.
+      - Loss function is CategoricalCrossEntropy since we are doing Multi-class classification. from_logits=True means the Output layer gives raw outputs without applying any activation function to normalize the value between a defined range
+      - Then, compile the model with metric=accuracy and return it.
+  - Set learning rate, inner size, dropout rate & Call the make_model function. Then, train the model using model.fit
+    ```Python
+    learning_rate = 0.001
+    size = 100
+    droprate = 0.2
+    
+    model = make_model(
+        learning_rate=learning_rate,
+        size_inner=size,
+        droprate=droprate
+    )
+    
+    history = model.fit(train_ds, epochs=20, validation_data=val_ds)
+    ```
+      - You need to specify no of Epochs. 1 EPOCH is when the model has gone through all of the Training data once. EPOCH = 10 means the model will go through the Training dataset 20 times to optimize the weights/biases
+      - model.fit() returns a history of all the training steps. 
