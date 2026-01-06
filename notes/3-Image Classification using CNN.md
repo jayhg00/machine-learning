@@ -351,7 +351,7 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
       - model builds Dense model using 'input', 'output'
       - Optimizer is Adam with default learning rate = 0.01.
       - Loss function is CategoricalCrossEntropy since we are doing Multi-class classification. from_logits=True means the Output layer gives raw outputs without applying any activation function to normalize the value between a defined range
-      - Then, compile the model with metric=accuracy and return it.
+      - Then, **compile** the model with metric=accuracy and return it.
   - Set learning rate, inner size, dropout rate & Call the make_model function. Then, train the model using model.fit
     ```Python
     learning_rate = 0.001
@@ -367,7 +367,7 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
     history = model.fit(train_ds, epochs=20, validation_data=val_ds)
     ```
       - You need to specify no of Epochs. 1 EPOCH is when the model has gone through all of the Training data once. EPOCH = 10 means the model will go through the Training dataset 10 times to optimize the weights/biases
-      - model.fit() returns a history of all the training steps. Note the Training Accuracy, Val_loss & Val_accuracy. After each EPOCH, Val_loss should generally reduce while Training Accuracy & Validation Accuracy should increase. Training no of steps = 96 batches because Training Images were 3068, divide it by 32 will need 96 batches. Validation no of steps = 11 batches because Validation images were 341, divide it by 32 will need 11 batches
+      - **model.fit()** returns a history of all the training steps. Note the Training Accuracy, Val_loss & Val_accuracy. After each EPOCH, Val_loss should generally reduce while Training Accuracy & Validation Accuracy should increase. Training no of steps = 96 batches because Training Images were 3068, divide it by 32 will need 96 batches. Validation no of steps = 11 batches because Validation images were 341, divide it by 32 will need 11 batches
     ```Python
     Train for 96 steps, validate for 11 steps
     Epoch 1/10
@@ -418,7 +418,7 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
     Dropout of 0.0 or 0.2 is more consistent.
 
   ### Data Augmentation
-  - This is to make the Training more robust by applying image transformation like Flipping, Rotation, Shear, Zoom in/out etc on existing images and creating new images.
+  - This is to make the Training more robust by applying **image transformation like Flipping, Rotation, Shear, Zoom in/out** etc on existing images and **creating new images**.
   - This way, the number of Training images will also increase and also will learn from not-so-perfect images.
   - Augmentation is applied via ImageDataGenerator on train_gen
     ```Python
@@ -436,3 +436,93 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
     - Tune it as a hyperparameter – Try different augmentations and see what works and what doesn’t.
     - Train it with new augmentation for 10-20 epochs. If it’s better then use it, if not then don’t use it. If it’s the same or similar result then train for some more epochs (like 20) and make the comparison again.
     
+    ### Checkpointing (Saving the model)
+    - During training, in every EPOCH, the weights will get updated (overwrite the previous weights).
+    - When we train for many EPOCHS like EPOCH = 20, we may see that model had best accuracy in EPOCH 8 and then model started degrading. And the best weights of EPOCH 8 would get overwritten by weights of EPOCH 9
+    - So, we want to **Save the model after every EPOCH**. This is called **CHECKPOINTING**. Model is saved as **.h5 file** with filename to include Epoch #, Val_accuracy 
+    - In Keras, Checkpointing is done through **Callbacks**.
+    - Define a ModelCheckpoint to **save only** if there is **improvement from last best resul**t. It will save model for EPOCH 1. If EPOCH 2 performance is better than EPOCH 1, it will save model to new file with name EPOCH2, else it will not save the file.
+    ```Python
+    checkpoint = keras.callbacks.ModelCheckpoint(
+      'xception_v1_{epoch:02d}_{val_accuracy:.3f}.h5',
+      save_best_only=True,
+      monitor='val_accuracy',
+      mode='max'
+    )
+    ```
+    - Pass this ModelCheckpoint 'checkpoint' callback to model.fit()
+    ```Python
+    history = model.fit(
+        train_ds,
+        epochs=10,
+        validation_data=val_ds,
+        callbacks=[checkpoint]
+    )
+    ```
+    - This will save Model in different .h5 files with the **last file** having the **best performance**
+   
+    ### Loading Saved Model & Prediction on Test Dataset
+    - We **load the Test Dataset**
+    ```Python
+    import tensorflow as tf
+    from tensorflow import keras
+    from tensorflow.keras.preprocessing.image import ImageDataGenerator
+    from tensorflow.keras.preprocessing.image import load_img
+    from tensorflow.keras.applications.xception import preprocess_input
+
+    test_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
+    test_ds = test_gen.flow_from_directory(
+        './clothing-dataset-small/test',
+        target_size=(150, 150),
+        batch_size=32,
+        shuffle=False  
+    )
+
+    # Output: Found 372 images belonging to 10 classes.
+    ```
+    - We **load model** from saved Checkpoint file having best performance and **evaluate it on test_ds**
+    ```Python
+    model = keras.models.load_model('xception_v4_1_13_0.903.h5')
+    model.evaluate(test_ds)
+
+    # Output 12/12 [==============================] - 8s 645ms/step - loss: 0.2939 - accuracy: 0.8978
+    ```
+    Accuracy on Test Dataset is 89.78% which is Good. So, our model seems good for use.
+
+    - Now, we take just **one random image** from the test dataset and **pass it as input X** to the model to **Predict**
+    ```Python
+    path = 'clothing-dataset-small/test/pants/c8d21106-bbdb-4e8d-83e4-bf3d14e54c16.jpg'
+    img = load_img(path, target_size=(150, 150))
+    x = np.array(img)  # Convert image to numpy array
+    X = np.array([x])
+    X.shape
+    # Output: (1, 299, 299, 3)
+    
+    X = preprocess_input(X)  # Pre-process the numpy Array
+    pred = model.predict(X)  # use the model to predict the class
+    classes = [
+        'dress',
+        'hat',
+        'longsleeve',
+        'outwear',
+        'pants',
+        'shirt',
+        'shoes',
+        'shorts',
+        'skirt',
+        't-shirt'
+    ]
+
+    dict(zip(classes, pred[0]))
+    # Output : {'dress': -1.4282539,
+                 'hat': -5.522186,
+                 'longsleeve': -3.1655293,
+                 'outwear': -2.201648,
+                 'pants': 9.294684,
+                 'shirt': -3.4289198,
+                 'shoes': -4.2395606,
+                 'shorts': 3.4339347,
+                 'skirt': -4.194675,
+                 't-shirt': -2.9939806}
+    ```
+    - Here, the Prediction output is Raw Score (Logit) and we see that Pant has got the highest score. So, our model correctly predicted the image class as Pant
