@@ -73,6 +73,9 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
 <hr/>
 
 ## Real world use-case: Fashion Classification
+ML Zoomcamp 2023 Notes by Peter Ernicke https://knowmledge.com/2023/11/18/ml-zoomcamp-2023-deep-learning-part-1/ <br/>
+ML Zoomcamp Playlist by Alexey Grigorev https://www.youtube.com/watch?v=it1Lu7NmMpw&list=PL3MmuxUbc_hIhxl5Ji8t4O6lPAOpHaCLR&index=69
+
 - Use Case: We have a website and the user wants to create a listing in the fashion category. For example, he wants to sell a t-shirt. He uploads a picture and there is a fashion classification service which will get this picture and reply with a suggested category (here: t-shirt).
 - This classification service will contain a neural network which will look at the image and predict a category for this image. (out of 10 most popular classe like T-shirts, pants, shirts etc)
 - The Images to Train, Validate, Test our model is located in this Github repo "https://github.com/alexeygrigorev/clothing-dataset-small". Within this repo, you have seperate folders for Train, Validate, Test. Within Train, Validate, Test, you have the 1 folder for each class (pants, t-shirt, shirt, etc) containing respective images
