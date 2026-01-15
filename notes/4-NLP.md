@@ -114,3 +114,61 @@
     print(lemmatized_words)
     # Output: ['stripe', 'bat', 'hang', 'foot', 'good', 'view']
     ```
+
+### Parts-Of-Speech (POS) Tagging
+- It assigns a grammatical category—such as noun, verb, or adjective—to each word in a sentence based on its definition and context
+- This technique is essential for resolving ambiguity; for instance, identifying whether "book" is a noun ("read a book") or a verb ("book a flight").
+- Common POS Tagsets
+    - Most Python libraries use one of two standards:
+      - Universal Tagset: A simplified set of 12 general tags like NOUN, VERB, and ADJ.
+      - Penn Treebank Tagset: A detailed set of 36 tags that distinguish specifics, such as plural nouns (NNS) vs. singular nouns (NN), or past tense verbs (VBD) vs. base form verbs (VB)
+     
+    #### POS Tagging by NLTK
+    NLTK uses the Penn Treebank tagset by default, providing high granularity.
+    ```Python
+    import nltk
+    from nltk.tokenize import word_tokenize
+    
+    # Necessary downloads for 2026 pipelines
+    nltk.download('punkt')
+    nltk.download('averaged_perceptron_tagger')
+    
+    text = "The quick brown fox jumps over the lazy dog."
+    tokens = word_tokenize(text)
+    
+    # Detailed Penn Treebank tagging
+    tagged = nltk.pos_tag(tokens)
+    print(tagged)
+    # Output: [('The', 'DT'), ('quick', 'JJ'), ('brown', 'JJ'), ('fox', 'NN'), ...]
+    ```
+
+    #### POS Tagging by spaCy
+    industrial standard because it automatically identifies both coarse-grained (universal) and fine-grained (detailed) tags simultaneously.
+    ```Python
+    import spacy
+    
+    # Load the English model
+    nlp = spacy.load("en_core_web_sm")
+    
+    text = "Time flies like an arrow."
+    doc = nlp(text)
+    
+    # Print header
+    print(f"{'Word':<10} | {'Universal':<10} | {'Detailed':<10} | {'Description'}")
+    print("-" * 65)
+    
+    # Iterate and print each token's attributes
+    for token in doc:
+        description = spacy.explain(token.tag_)
+        print(f"{token.text:<10} | {token.pos_:<10} | {token.tag_:<10} | {description}")
+    ```
+
+    Output-
+    | Word | Universal (token.pos_) | Detailed (token.tag_) | Description (spacy.explain) |
+    |---|---|---|---|
+    | Time | NOUN | NN | noun, singular or mass |
+    | flies | VERB | VBZ | verb, 3rd person singular present |
+    | like | ADP | IN | conjunction, subordinating or preposition |
+    | an | DET | DT | determiner |
+    | arrow | NOUN | NN | noun, singular or mass |
+    | . | PUNCT | . | punctuation mark, sentence closer |
