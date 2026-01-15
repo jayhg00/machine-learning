@@ -70,6 +70,14 @@ This Vector Representation of Image is done by CONVOLUTION + POOLING layer
 
     <kbd><img width="900" height="auto" alt="image" src="https://github.com/user-attachments/assets/3ab85b6f-d408-498e-937c-42ebade60150" /></kbd>
 
+### Practical CNN Architecture
+<kbd><img width="1000" height="auto" alt="image" src="https://github.com/user-attachments/assets/0d0a49e0-3b34-4bf3-8acb-9eaf1a935ee4" /></kbd>
+- Multiple Filters & Convolution+ReLU+Pooling layers are used sequentially to generate Feature Maps for Feature Extraction. Initial layers of convolution learns generic information and last layers learn more specific/complex features.
+- After the final Convolution+ReLU+Pooling Layer, the output feature map(matrix) will be converted into vector(one dimensional array). This is called flatten layer.
+- Output from Flatten Layer trains the Regular Neural Network (Fully Connected Layer) to get the Classification
+- Final Softmax Activation function is used to get Probability Distribution for Multi-class
+
+
 <hr/>
 
 ## Real world use-case: Fashion Classification
