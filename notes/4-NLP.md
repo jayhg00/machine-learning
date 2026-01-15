@@ -172,3 +172,59 @@
     | an | DET | DT | determiner |
     | arrow | NOUN | NN | noun, singular or mass |
     | . | PUNCT | . | punctuation mark, sentence closer |
+
+### Named Entity Recognition (NER)
+- NLP Task that automatically identifies and categorizes key information (entities) in unstructured text into predefined classes such as names of people, organizations, locations, dates, and more
+- Most modern models recognize these standard categories: 
+    - PERSON: Names of individuals (e.g., "John Doe").
+    - ORG: Companies, agencies, or institutions (e.g., "Google").
+    - GPE: Geopolitical entities like countries, cities, or states (e.g., "France").
+    - DATE: Absolute or relative dates/periods (e.g., "January 15, 2026").
+    - MONEY: Monetary values, including symbols (e.g., "$100 million").
+
+    #### NER using spaCy
+    spaCy is used for fast, production-ready pipelines on CPU
+    ```Python
+    import spacy
+
+    # Load the optimized English model (v3.0+ architecture)
+    nlp = spacy.load("en_core_web_sm")
+    
+    text = "Apple is looking at buying a U.K. startup for $1 billion in 2026."
+    doc = nlp(text)
+    
+    print(f"{'Entity':<15} | {'Label':<10} | {'Description'}")
+    print("-" * 50)
+    
+    # Extract entities from the .ents attribute
+    for ent in doc.ents:
+        print(f"{ent.text:<15} | {ent.label_:<10} | {spacy.explain(ent.label_)}")
+    ```
+    Output-
+    | Entity | Label | Description |
+    |---|---|---|
+    | Apple | ORG | Companies, agencies, institutions |
+    | U.K. | GPE | Countries, cities, states |
+    | $1 billion | MONEY | Monetary values |
+    | 2026 | DATE | Absolute or relative dates |
+
+    #### High accuracy NER using HuggingFace Transformers
+    For tasks requiring deeper contextual understanding (e.g., distinguishing "Apple" the fruit from "Apple" the company in complex sentences), transformer-based models like BERT or RoBERTa are preferred; Requires GPU
+    ```Python
+    from transformers import pipeline
+    
+    # Initialize the state-of-the-art NER pipeline
+    ner_pipeline = pipeline("ner", model="dbmdz/bert-large-cased-finetuned-conll03-english", aggregation_strategy="simple")
+    
+    text = "Sundar Pichai, the CEO of Google, visited London today."
+    entities = ner_pipeline(text)
+    
+    for ent in entities:
+        print(f"Entity: {ent['word']} | Label: {ent['entity_group']} | Score: {ent['score']:.4f}")
+    ```
+    When using the Hugging Face ```dbmdz/bert-large-cased-finetuned-conll03-english``` model with the ```aggregation_strategy="simple"``` parameter in 2026, the model groups sub-tokens back into whole words and provides a confidence score for each entity. Because we used ```aggregation_strategy="simple"```, "Sundar Pichai" is returned as a single unit rather than separate tokens.
+    | Entity | Label | Score | Start | End |
+    |---|---|---|---|---|
+    | Sundar Pichai | PER | 0.9994 | 0 | 13 |
+    | Google | ORG | 0.9982 | 25 | 31 |
+    | London | LOC | 0.9997 | 41 | 47 |
