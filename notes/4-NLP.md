@@ -70,3 +70,47 @@
 | Output Precision | May not be a real word (happi) | Always a valid dictionary word (happy) |
 | Context | Ignores context | Considers context (e.g., Part of Speech) |
 | Usecase | Use for high-speed indexing of massive datasets where exact word forms matter less | Use when meaning is critical (chatbots, translation) |
+
+#### Code example - TOKENIZE, STOP WORD REMOVAL, STEMMING, LEMMATIZING
+- **NLTK** (Natural Language Toolkit) & **Spacy** **libraries**  are widely used. NTLK has both STEMMIMG & LEMMATIZATION functions while Spacy has only Lemmatization.
+- Spacy is more industrial grade and is highly used for Lemmatization because it automatically identifies Part-of-Speech (POS) tags to ensure the lemma is a valid dictionary word
+
+    #### NLTK: Stemming with Stopword Removal
+    ```python
+    import nltk
+    from nltk.stem import PorterStemmer
+    from nltk.corpus import stopwords
+    from nltk.tokenize import word_tokenize
+    
+    # Necessary downloads
+    nltk.download('punkt')
+    nltk.download('stopwords')
+    
+    text = "The striped bats are hanging on their feet for the best view."
+    stop_words = set(stopwords.words('english'))
+    ps = PorterStemmer()
+    
+    # Tokenize, remove stopwords, and stem
+    tokens = word_tokenize(text.lower())
+    stemmed_words = [ps.stem(w) for w in tokens if w.isalpha() and w not in stop_words]
+    
+    print(stemmed_words)
+    # Output: ['stripe', 'bat', 'hang', 'feet', 'best', 'view']
+    ```
+
+    #### spaCy: Lemmatization with Stopword Removal
+    ```python
+    import spacy
+
+    # Load the English model
+    nlp = spacy.load("en_core_web_sm")
+    
+    text = "The striped bats are hanging on their feet for the best view."
+    doc = nlp(text)
+    
+    # Filter out stopwords and punctuation, then lemmatize
+    lemmatized_words = [token.lemma_ for token in doc if not token.is_stop and not token.is_punct]
+    
+    print(lemmatized_words)
+    # Output: ['stripe', 'bat', 'hang', 'foot', 'good', 'view']
+    ```
