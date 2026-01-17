@@ -228,3 +228,73 @@
     | Sundar Pichai | PER | 0.9994 | 0 | 13 |
     | Google | ORG | 0.9982 | 25 | 31 |
     | London | LOC | 0.9997 | 41 | 47 |
+
+## Text to Vectors
+- ML algorithms need inputs as numbers only. So, each of the the text inputs (documents or sentences) need to be transformed to vectors (1-D Array).
+- Different techniques exist to do that - some capture the semantic meaning of the sentences, while some do not.
+
+### Bag Of Words
+- Converts each sentence into its vector using counts of each word, completely ignoring grammar and word order
+- General Steps-
+  1. Normalization: Convert text to lowercase and remove punctuation to ensure consistency (e.g., treating "Cat" and "cat" as the same).
+  2. Tokenization: Break sentences down into individual words or "tokens".
+  3. Vocabulary Creation: Identify every unique word across all documents to form a master list.
+  4. Word Counting: Count how many times each word from the vocabulary appears in a specific document.
+  5. Vector Representation: Each document becomes a vector of numbers, where each position corresponds to a word in the vocabulary.
+- Example:
+  - Let Corpus be following 3 documents-
+    - D1: 'The cat sat on the mat.',
+    - D2: 'The dog played in the yard.',
+    - D3: 'The cat and the dog are friends.'
+  - After normalization & tokenization, the vocabulary becomes:
+    'and', 'are', 'cat', 'dog', 'friends', 'in', 'mat', 'on', 'played', 'sat', 'the', 'yard'
+  - Then, for each document, corresponding words are counted and the count is put under the corresponding word to form the vector representation. This will lead to Sparse Matrix (many 0s)
+    | Word | and | are | cat | dog | friends | in | mat | on | played | sat | the | yard |
+    |---|---|---|---|---|---|---|---|---|---|---|---|---|
+    | Doc 1 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 | 1 | 2 | 0 |
+    | Doc 2 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 2 | 1 |
+    | Doc 3 | 1 | 1 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 0 |
+    
+    So, the vectors are
+    - D1: [0 0 1 0 0 0 1 1 0 1 2 0]  # "The cat sat on the mat."
+    - D2: [0 0 0 1 0 1 0 0 1 0 2 1]  # "The dog played in the yard."
+    - D3: [1 1 1 1 1 0 0 0 0 0 2 0]] # "The cat and the dog are friends."
+
+    ```Python
+    from sklearn.feature_extraction.text import CountVectorizer
+    
+    # Sample data: A list of text documents
+    corpus = [
+        'The cat sat on the mat.',
+        'The dog played in the yard.',
+        'The cat and the dog are friends.'
+    ]
+    
+    # Initialize CountVectorizer (handles tokenization and lowercase automatically)
+    vectorizer = CountVectorizer()
+    
+    # Fit and transform the corpus into a BoW matrix
+    bow_matrix = vectorizer.fit_transform(corpus)
+    
+    # Get the vocabulary (unique words)
+    print("Vocabulary:", vectorizer.get_feature_names_out())
+    # Output: ['and', 'are', 'cat', 'dog', 'friends', 'in', 'mat', 'on', 'played', 'sat', 'the', 'yard']
+    
+    # Convert to array and display the numerical vectors
+    print("BoW Vectors:\n", bow_matrix.toarray())
+    # Output: [[0 0 1 0 0 0 1 1 0 1 2 0]  # "The cat sat on the mat."
+    #           [0 0 0 1 0 1 0 0 1 0 2 1]  # "The dog played in the yard."
+    #           [1 1 1 1 1 0 0 0 0 0 2 0]] # "The cat and the dog are friends."
+    ```
+
+    | Advantages  | Disadvantages |
+    |---|---|
+    | Simplicity: Very easy to understand and implement for beginners. | Loss of Context: Ignores word order; "dog chases cat" and "cat chases dog" look identical to the model. |
+    | Efficiency: Computationally lightweight and scales well to large datasets. | Sparsity: For large vocabularies, vectors contain mostly zeros, wasting memory and computation. |
+    | Interpretability: You can easily see which words contribute most to a classification. | Lack of Semantics: Fails to recognize synonyms (e.g., "happy" and "joyful" are treated as unrelated). |
+    | No Training Required: Unlike deep learning models, it works instantly on any corpus without pretraining. | High Dimensionality: As vocabulary grows, the vector size increases linearly, which can lead to overfitting. |
+
+- Usecases of BoW:-
+  - Spam Detection: Filtering emails based on specific trigger words.
+  - Sentiment Analysis: Quickly gauging customer mood in surveys or reviews.
+  - Document Classification: Categorizing news or legal files into topics. 
