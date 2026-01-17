@@ -298,3 +298,12 @@
   - Spam Detection: Filtering emails based on specific trigger words.
   - Sentiment Analysis: Quickly gauging customer mood in surveys or reviews.
   - Document Classification: Categorizing news or legal files into topics. 
+
+### Term Frequency - Inverse Document Frequency TF-IDF
+- TF-IDF (Term Frequency-Inverse Document Frequency) is a numerical statistic used to reflect how important a word is to a document in a corpus
+- Emphasizes unique, informative words while weighs down common words like 'the', 'a' etc
+- It is the product of two statistics:
+  1. Term Frequency (TF): Measures how often a word appears in a specific document. The more frequent the word, the higher the score.
+  2. Inverse Document Frequency (IDF): Measures how unique a word is across the entire corpus. Words that appear in many documents get a lower score, while rare words get a higher score.
+  3. TF-IDF Calculation, TF * IDF: A high score is reached by a word having a high frequency in one document but a low frequency in the overall corpus
+  
