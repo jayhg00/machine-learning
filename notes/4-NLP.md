@@ -231,7 +231,9 @@
 
 ## Text to Vectors
 - ML algorithms need inputs as numbers only. So, each of the the text inputs (documents or sentences) need to be transformed to vectors (1-D Array).
-- Different techniques exist to do that - some capture the semantic meaning of the sentences, while some do not.
+- Different techniques exist to do that -
+  - some capture the semantic meaning of the sentences like Word Embeddings (Word2Vec, Glove, Fastext) and Deep Learning Transformer-based models (ELMO, BERT),
+  - while some do not capture semantic meaning like Traditional/Statistical Count-based Methods (Bag Of Words, TF-IDF).
 
 ### Bag Of Words
 - Converts each sentence into its vector using counts of each word, completely ignoring grammar and word order
