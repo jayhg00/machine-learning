@@ -260,6 +260,7 @@
     - D2: [0 0 0 1 0 1 0 0 1 0 2 1]  # "The dog played in the yard."
     - D3: [1 1 1 1 1 0 0 0 0 0 2 0]] # "The cat and the dog are friends."
 
+     ** SkLearn CountVectorizer**
     ```Python
     from sklearn.feature_extraction.text import CountVectorizer
     
@@ -293,7 +294,9 @@
     | Efficiency: Computationally lightweight and scales well to large datasets. | Sparsity: For large vocabularies, vectors contain mostly zeros, wasting memory and computation. |
     | Interpretability: You can easily see which words contribute most to a classification. | Lack of Semantics: Fails to recognize synonyms (e.g., "happy" and "joyful" are treated as unrelated). |
     | No Training Required: Unlike deep learning models, it works instantly on any corpus without pretraining. | High Dimensionality: As vocabulary grows, the vector size increases linearly, which can lead to overfitting. |
-
+  
+    - One Disadvantage is that if the test data has any new words which are not there in the Vocabulary, then it is a "Out of Vocabulary" issue and its vectorization will be incomplete.
+      
 - Usecases of BoW:-
   - Spam Detection: Filtering emails based on specific trigger words.
   - Sentiment Analysis: Quickly gauging customer mood in surveys or reviews.
@@ -306,4 +309,60 @@
   1. Term Frequency (TF): Measures how often a word appears in a specific document. The more frequent the word, the higher the score.
   2. Inverse Document Frequency (IDF): Measures how unique a word is across the entire corpus. Words that appear in many documents get a lower score, while rare words get a higher score.
   3. TF-IDF Calculation, TF * IDF: A high score is reached by a word having a high frequency in one document but a low frequency in the overall corpus
-  
+- Example:
+  - Let Corpus be following 3 documents-
+    - D1: 'The cat sat on the mat.',
+    - D2: 'The dog played in the yard.',
+    - D3: 'The cat and the dog are friends.'
+  - After normalization & tokenization, the vocabulary becomes:
+    'and', 'are', 'cat', 'dog', 'friends', 'in', 'mat', 'on', 'played', 'sat', 'the', 'yard'
+  - Term Frequency = Count of word in Doc/Total no of words in Doc :
+    - D1: [0 0 1/6 0 0 0 1/6 1/6 0 1/6 2/6 0]
+    - D2: [0 0 0 1/6 0 1/6 0 0 1/6 0 2/6 1/6]
+    - D3: [1/6 1/6 1/6 1/6 1/6 0 0 0 0 0 2/6 0]
+  - Inverse Document Frequency = log(total no of docs in corpus/no of docs containing the term):
+      log [3 3 3/2 3/2 3 3 3 3 3 3 1 3]
+  - TF-IDF (Vectors)-
+      |    |      and  |      are  |      cat  |      dog  |  friends  |       in |       mat  |       on |    played |       sat |       the |      yard |
+      |---|---|---|---|---|---|---|---|---|---|---|---|---|
+      | D1 |  0.000000 |  0.000000 |  0.400566 |  0.000000 |  0.000000 |  0.000000 |  0.526645 |  0.526645 |  0.000000 |  0.526645 |  0.113060 |  0.000000 |
+      | D2 |  0.000000 |  0.000000 |  0.000000 |  0.400566 |  0.000000 |  0.526645 |  0.000000 |  0.000000 |  0.526645 |  0.000000 |  0.113060 |  0.526645 |
+      | D3 |  0.470426 |  0.470426 |  0.357783 |  0.357783 |  0.470426 |  0.000000 |  0.000000 |  0.000000 |  0.000000 |  0.000000 |  0.101004 |  0.000000 |
+  - **Sk-Learn TfidfVectorizer**
+   ```Python
+   from sklearn.feature_extraction.text import TfidfVectorizer
+    import pandas as pd
+    
+    # Sample corpus
+    corpus = [
+        'The cat sat on the mat.',
+        'The dog played in the yard.',
+        'The cat and the dog are friends.'
+    ]
+    
+    # Initialize TfidfVectorizer
+    vectorizer = TfidfVectorizer()
+    
+    # Fit and transform the corpus
+    tfidf_matrix = vectorizer.fit_transform(corpus)
+    
+    # Convert to a DataFrame for readability
+    df = pd.DataFrame(
+        tfidf_matrix.toarray(), 
+        columns=vectorizer.get_feature_names_out()
+    )
+    
+    print(df)
+    #         and       are       cat       dog   friends        in       mat        on    played       sat       the      yard
+    # 1  0.000000  0.000000  0.400566  0.000000  0.000000  0.000000  0.526645  0.526645  0.000000  0.526645  0.113060  0.000000
+    # 2  0.000000  0.000000  0.000000  0.400566  0.000000  0.526645  0.000000  0.000000  0.526645  0.000000  0.113060  0.526645
+    # 3  0.470426  0.470426  0.357783  0.357783  0.470426  0.000000  0.000000  0.000000  0.000000  0.000000  0.101004  0.000000
+
+   ```
+ - Advantages
+   -  Word importance is captured
+   -  Fast, easy to compute
+- Disadvantages
+  - No semantic meaning
+  - Out of Vocabulary issue (Test data has words not in Vocabulary)
+  - For large vocabulary, leads to sparse matrix
