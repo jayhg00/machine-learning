@@ -482,3 +482,11 @@ Output-
 - Use **Neural Network** when:-
   - **Unstructured data (Images, Text, Audio)**
   - **Massive dataset (large data volume required to prevent overfitting)**
+
+## Model saving and serving
+- **For Classical Models-**
+  - To save/load the model, use Python's built-in library PICKLE to create model.bin
+  - To serve the model for predictions, use FastAPI or Flask
+- **For Tensorflow Keras NN models-**
+  - To save/load the model, use Keras model.save() to create model.keras or model.h5 file
+  - To serve the model for predictions, use TensorFlow Serving which is specially designed and optimized to serve TF models
