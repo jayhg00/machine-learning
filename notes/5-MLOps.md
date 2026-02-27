@@ -100,13 +100,89 @@ Key terms-
 - MLFlow uses a client-server framework. It also provides a **Gunicorn web UI to view the info on the server**
 - **Tracking server runs on localhost:5000 or remote:5000**. Our Jupyter notebook/Python script code or MLFlowClient API calls methods to manage Experiment Tracking or Model Registry
   - All runs and associated info will be stored either in-
-    - Localsystem (under .mlruns folder where .ipynb/.py file resides) Default, if no backend store is specified for the server
+    - Localsystem (under ./mlruns folder where .ipynb/.py file resides) Default, if no backend store is specified for the server
     - SQL compatible database (SQLite, PostGreSQL etc)
-  - For Model Registry, backend store is to be specified. The backend stores the metadata about the model in the Model Registry while the actual Model binaries can be stored either in-
-    - Localsystem (under .models folder where .ipynb/.py file resides)
+  - For Model Registry, backend store is to be specified. The backend stores the metadata about the model in the Model Registry while the actual Model binaries (.pkl, .h5, .keras etc) can be stored either in-
+    - Localsystem (under ./models folder where .ipynb/.py file resides)
     - Remote (AWS S3 bucket, Azure Blob Container)
   - The location of mlruns & inside mlruns file structure for localsystem is like below-
     
 <kbd><img width="500" alt="image" src="https://github.com/user-attachments/assets/93a4c362-51e3-4072-9800-b5f471a51350" /></kbd> 
 <kbd><img width="374" alt="image" src="https://github.com/user-attachments/assets/abf2bf81-bd45-4813-aa40-74b8caf2f3c1" /></kbd>
 
+#### Installing MLFlow
+```Python
+$> pip install mlflow
+```
+
+#### Running the MLFlow UI (run from command prompt) with SQLite backend store. This starts the Gunicorn web UI on localhost:5000/. Open the URL localhost:5000 on browser
+```
+$> mlflow ui --backend-store-uri sqlite:///mlflow.db
+```
+
+#### Adding MLFlow to jupyter notebook
+```Python
+# Other imports
+
+import mlflow
+
+## Set the TRACKING URI
+mlflow.set_tracking_uri("sqlite:///mlflow.db")
+mlflow.set_experiment("nyc-taxi-experiment")
+
+## COde to prepare X_train, X_val etc
+
+## Wrap the Training/Prediction as a "Run"
+with mlflow.start_run():
+    # SET Tag
+    mlflow.set_tag("developer", "cristian")
+
+    # Log some parameters
+    mlflow.log_param("train-data-path", "./data/green_tripdata_2021-01.csv")
+    mlflow.log_param("valid-data-path", "./data/green_tripdata_2021-02.csv")
+
+    alpha = 0.1
+    mlflow.log_param("alpha", alpha)  ## Log the learning rate alpha
+    lr = Lasso(alpha)
+    lr.fit(X_train, y_train)
+
+    y_pred = lr.predict(X_val)
+    rmse = mean_squared_error(y_val, y_pred, squared=False)
+    mlflow.log_metric("rmse", rmse)  ## Log the RMSE metric
+
+    ## Log the model as an artifact
+    mlflow.log_artifact(local_path="models/lin_reg.bin", artifact_path="models_pickle")
+```
+MLFlow creates an experiment if it does not exist. Everytime you run the cell of "mlflow.start_run()" with different values of alpha or the train-data-path/valid-data-path, MLFlow will create a run in that experiment and log the specified data.
+
+#### Viewing the experiment thru UI
+Run the MLFlow UI Cmd from cmd prompt and navigate to localhost:5000/
+<kbd><img width="1200" alt="image" src="https://github.com/user-attachments/assets/f35810cb-93d9-49be-b419-f0d75b8ecb12" /></kbd>
+
+Open the Run to see its data alongwith Model Artifacts
+<kbd><img width="1200" alt="image" src="https://github.com/user-attachments/assets/06d4076c-8bfe-423f-9bbf-4327fd183ed6" /></kbd>
+<kbd><img width="1200" alt="image" src="https://github.com/user-attachments/assets/9ef3bc31-3b72-42fd-878b-6287e19b37dd" /></kbd>
+
+
+#### Autologging
+call mlflow.autolog() before your training code. This will log for all libraries
+```Python
+import mlflow
+
+mlflow.autolog()
+with mlflow.start_run():
+    # your training code goes here
+    ...
+```
+
+  Enable/Disable Autologging for specific libraries. For example, if you train your model on PyTorch but use scikit-learn for data preprocessing, you may want to disable autologging for scikit-learn while keeping it enabled for PyTorch. You can achieve this by either (1) enable autologging only for PyTorch using PyTorch flavor (2) disable autologging for scikit-learn using its flavor with disable=True.
+  ```Python
+  import mlflow
+  
+  # Option 1: Enable autologging only for PyTorch
+  mlflow.pytorch.autolog()
+  
+  # Option 2: Disable autologging for scikit-learn, but enable it for other libraries
+  mlflow.sklearn.autolog(disable=True)
+  mlflow.autolog()
+  ```
