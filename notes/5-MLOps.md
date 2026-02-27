@@ -53,3 +53,46 @@ https://www.youtube.com/watch?v=s0uaFZSzwfI&list=PL3MmuxUbc_hIUISrluw_A7wDSmfOhE
   - Automated Deployment
   - Automated Re-training & re-deployment without any human intervention
 - Not all model use-cases need to be at Level 4. It all depends on the importance of the use-case and model
+
+## Experiment Tracking
+It is the process of keeping track of all the relevant information from an ML experiment, which includes:
+
+    - Source code
+    - Environment
+    - Data
+    - Model
+    - Hyperparameters
+    - Metrics, etc
+    
+Key terms-
+- ML experiment: the process of building an ML model
+- Experiment run: each trial in an ML experiment
+- Run artifact: any file that is associated with an ML run
+- Experiment metadata: information about an ML experiment like the source code used, the name of the user, etc.
+- Experiment tracking is important because:-
+  - Reproducibility
+  - Organization
+  - Optimization
+- Manually tracking experiment-related parameters in Excel is cumbersome and error-prone
+
+
+## MLFlow (open-source)
+- MLFlow is open-source, Python package installed with pip and contains following Modules:
+  - Experiment Tracking
+  - Models
+  - Model Registry
+  - Projects
+- Paid alternatives are Neptune, Comet, Weights & Biases
+
+### Experiment Tracking with MlFlow
+- The MLflow Tracking module allows you to organize your **experiments** into **runs**, and each run tracks the following:
+  - Parameters
+  - Metrics
+  - Metadata
+  - Artifacts
+  - Models
+- Along with above information, MLflow automatically logs extra information about the run:
+  - Source code
+  - Version of the code (git commit)
+  - Start and end time
+  - Author
