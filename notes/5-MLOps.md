@@ -96,3 +96,17 @@ Key terms-
   - Version of the code (git commit)
   - Start and end time
   - Author
+
+- MLFlow uses a client-server framework. It also provides a **Gunicorn web UI to view the info on the server**
+- **Tracking server runs on localhost:5000 or remote:5000**. Our Jupyter notebook/Python script code or MLFlowClient API calls methods to manage Experiment Tracking or Model Registry
+  - All runs and associated info will be stored either in-
+    - Localsystem (under .mlruns folder where .ipynb/.py file resides) Default, if no backend store is specified for the server
+    - SQL compatible database (SQLite, PostGreSQL etc)
+  - For Model Registry, backend store is to be specified. The backend stores the metadata about the model in the Model Registry while the actual Model binaries can be stored either in-
+    - Localsystem (under .models folder where .ipynb/.py file resides)
+    - Remote (AWS S3 bucket, Azure Blob Container)
+  - The location of mlruns & inside mlruns file structure for localsystem is like below-
+    
+<kbd><img width="500" alt="image" src="https://github.com/user-attachments/assets/93a4c362-51e3-4072-9800-b5f471a51350" /></kbd> 
+<kbd><img width="374" alt="image" src="https://github.com/user-attachments/assets/abf2bf81-bd45-4813-aa40-74b8caf2f3c1" /></kbd>
+
